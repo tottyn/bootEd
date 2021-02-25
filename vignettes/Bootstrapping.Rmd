@@ -10,8 +10,6 @@ editor_options:
 bibliography: ref.bib
 citation_package: biblatex
 biblatexoptions: [style = authoryear, maxcitenames = 2, uniquelist = false]
-nocite: |
-  @bardelli2016nonparametric, @ernst2004permutation, @tritchler1984inverting, @garthwaite1996confidence
 ---
 
 ```{r setup, include = FALSE}
