@@ -12,7 +12,7 @@
 
 
 
-<title>Constructing Bootstrap Intervals</title>
+<title>Bootstrapping: Constructing Bootstrap Intervals</title>
 
 
 
@@ -88,7 +88,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Constructing Bootstrap Intervals</h1>
+<h1 class="title toc-ignore">Bootstrapping: Constructing Bootstrap Intervals</h1>
 
 
 
@@ -124,12 +124,11 @@ MathJax.Hub.Config({
   (\hat\theta - a_{1 -\alpha/2}, \hat\theta - a_{\alpha/2})
 \end{equation}\]</span>
 <p>These quantiles can be estimated through bootstrapping by noting that the <span class="math inline">\(p\)</span>-th quantile, <span class="math inline">\(a_p = t_p - \theta\)</span>, can be estimated with <span class="math inline">\(a^*_p = t^*_p - \hat\theta\)</span> where <span class="math inline">\(t_p\)</span> and <span class="math inline">\(t^*_p\)</span> are the <span class="math inline">\(p\)</span>-th quantiles of the distributions of <span class="math inline">\(\hat\theta\)</span> and <span class="math inline">\(\hat\theta^*\)</span>, respectively. Upon substituting these estimates into <span class="math inline">\(\eqref{eq:mainconf}\)</span> we obtain the <i> basic bootstrap interval </i> which is <span class="math display">\[(2\hat\theta - t^*_{(B + 1)(1 - \alpha/2)}, 2\hat\theta - t^*_{(B + 1)(\alpha/2)}),\]</span></p>
-<p>where <span class="math inline">\(B\)</span> is the number of bootstrap resamples. The use of the <span class="math inline">\((B+1)*p\)</span> largest value for the <span class="math inline">\(p\)</span>-th quantile is suggested by <span class="citation">Davison and Hinkley (1997)</span> as a more reasonable option that the <span class="math inline">\(p\)</span>-th quantile. It is noted by <span class="citation">Carpenter and Bithell (2000)</span> that there is substantial coverage error when the distributions of <span class="math inline">\(\hat\theta - \theta\)</span> and <span class="math inline">\(\hat\theta^* - \hat\theta\)</span> differ significantly.</p>
+<p>where <span class="math inline">\(B\)</span> is the number of bootstrap resamples. The use of the <span class="math inline">\((B+1)*p\)</span> largest value for the <span class="math inline">\(p\)</span>-th quantile is suggested by <span class="citation">Davison and Hinkley (1997)</span> as a more reasonable option that the <span class="math inline">\(p\)</span>-th quantile. It should be noted that there is substantial coverage error when the distributions of <span class="math inline">\(\hat\theta - \theta\)</span> and <span class="math inline">\(\hat\theta^* - \hat\theta\)</span> differ significantly.</p>
 <p><b> Percentile Bootstrap Interval </b></p>
-<p>If the distribution of <span class="math inline">\(\hat\theta - \theta\)</span> is symmetric then <span class="math inline">\(-a_{1 -\alpha/2} = a_{\alpha/2}\)</span> and due to the symmetry the bootstrap estimates for <span class="math inline">\(a_{1-\alpha/2}\)</span> and <span class="math inline">\(a_{\alpha/2}\)</span> may be denoted as <span class="math inline">\(a^*_{\alpha/2} = \hat\theta - t^*_{1 -\alpha/2}\)</span> and <span class="math inline">\(a^*_{1-\alpha/2} = \hat\theta - t^*_{\alpha/2}\)</span> where <span class="math inline">\(t^*_p\)</span> is the <span class="math inline">\(p\)</span>-th quantile of the distribution of bootstrap sample statistics. Therefore, <span class="math inline">\(\eqref{eq:mainconf}\)</span> becomes <span class="math inline">\((t^*_{(B+1)(\alpha/2)}, t^*_{(B+1)(1-\alpha/2)})\)</span> and this is the <i> percentile bootstrap interval </i>. It is noted by <span class="citation">Carpenter and Bithell (2000)</span> that the simplicity of this method contributes to its attractivness and that it is transformation respecting but one should be weary in applying it if the distribution of <span class="math inline">\(\hat\theta\)</span> is not nearly symmetric as it can have low coverage. Also, <span class="citation">Hesterberg (2015)</span> notes that this method is less accurate than <span class="math inline">\(t\)</span>-intervals for sample sizes of 34 or smaller.</p>
+<p>If the distribution of <span class="math inline">\(\hat\theta - \theta\)</span> is symmetric then <span class="math inline">\(-a_{1 -\alpha/2} = a_{\alpha/2}\)</span> and due to the symmetry the bootstrap estimates for <span class="math inline">\(a_{1-\alpha/2}\)</span> and <span class="math inline">\(a_{\alpha/2}\)</span> may be denoted as <span class="math inline">\(a^*_{\alpha/2} = \hat\theta - t^*_{1 -\alpha/2}\)</span> and <span class="math inline">\(a^*_{1-\alpha/2} = \hat\theta - t^*_{\alpha/2}\)</span> where <span class="math inline">\(t^*_p\)</span> is the <span class="math inline">\(p\)</span>-th quantile of the distribution of bootstrap sample statistics. Therefore, <span class="math inline">\(\eqref{eq:mainconf}\)</span> becomes <span class="math inline">\((t^*_{(B+1)(\alpha/2)}, t^*_{(B+1)(1-\alpha/2)})\)</span> and this is the <i> percentile bootstrap interval </i>. The simplicity of this method makes it desirable from a pedagogical standpoint but one should be weary in applying it if the distribution of <span class="math inline">\(\hat\theta\)</span> is not nearly symmetric as it can have low coverage.</p>
 <p><b> Studentized Bootstrap Interval </b></p>
-<p>The <i> studentized bootstrap interval </i> attempts to lower the coverage error of the basic bootstrap interval. Under the assumption of normality in the sampling distribution of <span class="math inline">\(\hat\theta\)</span> a confidence interval for <span class="math inline">\(\theta\)</span> is <span class="math display">\[\hat\theta \pm z_{1-\alpha/2} \sqrt{Var(\hat\theta)}.\]</span></p>
-<p>The normality assumption may not hold and <span class="math inline">\(Var(\hat\theta)\)</span> is usually unknown but these can be estimated using bootstrapping. Let <span class="math inline">\(z^*_p\)</span> be the <span class="math inline">\(p\)</span>-th quantile of the distribution <span class="math display">\[z^* = \frac{\hat\theta^* - \hat\theta}{\hat{\sigma}^*},\]</span> <span class="math inline">\(\hat{\sigma}\)</span> be an estimate for the standard deviation of <span class="math inline">\(\hat\theta\)</span>, and <span class="math inline">\(\hat{\sigma}^*\)</span> be an estimate of the standard deviation of <span class="math inline">\(\hat\theta^*\)</span>. This leads to <span class="math inline">\((1-\alpha)\)</span> equi-tailed interval of the form <span class="math display">\[\left(\hat\theta - z^*_{1-\alpha/2}\hat{\sigma},~~ \hat\theta - z^*_{\alpha/2}\hat{\sigma}\right).\]</span> An estimate for the variance of <span class="math inline">\(\hat\theta\)</span> is <span class="math display">\[\hat\sigma^2 = \frac{1}{B-1}\displaystyle\sum_{i=1}^B(\hat\theta_i^* - \hat\theta)^2\]</span> and the second level bootstrap recommended by <span class="citation">Hesterberg (2015)</span>, <span class="citation">Carpenter and Bithell (2000)</span> and <span class="citation">Davison and Hinkley (1997)</span> can be used to obtain <span class="math inline">\(\hat{\sigma}^*\)</span>. It is noted by <span class="citation">Carpenter and Bithell (2000)</span> that this method performs poorly if <span class="math inline">\(\hat\sigma\)</span> is not independent of <span class="math inline">\(\hat\theta\)</span> but <span class="citation">Davison and Hinkley (1997)</span> note that this method intrinsically results in better accuracy than the basic and percentile bootstrap intervals.</p>
+<p>Using normal approximation a confidence interval for <span class="math inline">\(\theta\)</span> is given as <span class="math inline">\(\hat\theta \pm z_{1-\alpha/2} \sqrt{\hat{\sigma}^2}\)</span>. Each of the needed values can be estimated through bootstrapping: the critical value, <span class="math inline">\(z_{1-\alpha/2}\)</span>, is estimated with <span class="math inline">\(z^*_p\)</span>, the <span class="math inline">\(p\)</span>-th quantile of the distribution of <span class="math display">\[z^* = \frac{\hat\theta^* - \hat\theta}{\hat{\sigma}^*}\]</span> where <span class="math inline">\(\hat{\sigma}^*\)</span> is an estimate of the standard deviation of <span class="math inline">\(\hat\theta^*\)</span> and <span class="math inline">\(\hat{\sigma}\)</span> is an estimate for the standard deviation of <span class="math inline">\(\hat\theta\)</span> which uses the bootstrap sample statistics and the original sample statistic. This leads to <span class="math inline">\((1-\alpha)\)</span> equi-tailed interval of the form <span class="math display">\[\left(\hat\theta - z^*_{(B+1)(1-\alpha/2)}\hat{\sigma},~~ \hat\theta - z^*_{(B+1)(\alpha/2)}\hat{\sigma}\right).\]</span></p>
 </div>
 <div id="baby-names-example" class="section level2">
 <h2>Baby Names Example</h2>
@@ -239,7 +238,7 @@ babyprops &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span cl
   babyprops[i] &lt;-<span class="st"> </span><span class="kw">sum</span>(babies2012sample_loop<span class="op">$</span>sex <span class="op">==</span><span class="st"> &quot;F&quot;</span>)<span class="op">/</span><span class="kw">length</span>(babies2012sample_loop<span class="op">$</span>sex)
   
 }</code></pre></div>
-<p>The histogram below is the sampling distribution of the sample statistic. It is roughly centered at the population proportion due to the Central Limit Theorem and will be more so as we increase the sample size.</p>
+<p>The histogram below is the approximate sampling distribution of the sample statistic. It is roughly centered at the population proportion due to the Central Limit Theorem and will be more so as we increase the sample size.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="co"># calculate the population proportion and save</span>
 
@@ -386,9 +385,6 @@ contained &lt;-<span class="st"> </span><span class="kw">logical</span>(<span cl
 <div id="ref-bardelli2016nonparametric">
 <p>Bardelli, Chiara. 2016. “Nonparametric Confidence Intervals Based on Permutation Tests.” Italy.</p>
 </div>
-<div id="ref-carpenter2000bootstrap">
-<p>Carpenter, James, and John Bithell. 2000. “Bootstrap Confidence Intervals: When, Which, What? A Practical Guide for Medical Statisticians.” <em>Statistics in Medicine</em> 19 (9). Wiley Online Library: 1141–64.</p>
-</div>
 <div id="ref-davison1997bootstrap">
 <p>Davison, Anthony Christopher, and David Victor Hinkley. 1997. <em>Bootstrap Methods and Their Application</em>. Vol. 1. Cambridge university press.</p>
 </div>
@@ -397,9 +393,6 @@ contained &lt;-<span class="st"> </span><span class="kw">logical</span>(<span cl
 </div>
 <div id="ref-garthwaite1996confidence">
 <p>Garthwaite, Paul H. 1996. “Confidence Intervals from Randomization Tests.” <em>Biometrics</em>. JSTOR, 1387–93.</p>
-</div>
-<div id="ref-hesterberg2015teachers">
-<p>Hesterberg, Tim C. 2015. “What Teachers Should Know About the Bootstrap: Resampling in the Undergraduate Statistics Curriculum.” <em>The American Statistician</em> 69 (4). Taylor &amp; Francis: 371–86.</p>
 </div>
 <div id="ref-tritchler1984inverting">
 <p>Tritchler, David. 1984. “On Inverting Permutation Tests.” <em>Journal of the American Statistical Association</em> 79 (385). Taylor &amp; Francis: 200–207.</p>

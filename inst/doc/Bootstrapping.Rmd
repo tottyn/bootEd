@@ -1,5 +1,5 @@
 ---
-title: "Constructing  Bootstrap Intervals"
+title: "Bootstrapping: Constructing  Bootstrap Intervals"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Constructing  Bootstrap Intervals}
@@ -76,17 +76,15 @@ If we denote the $\alpha/2$ and $1-\alpha/2$ quantiles of the distribution of $\
 
 These quantiles can be estimated through bootstrapping by noting that the $p$-th quantile, $a_p = t_p - \theta$, can be estimated with $a^*_p = t^*_p - \hat\theta$ where $t_p$ and $t^*_p$ are the $p$-th quantiles of the distributions of $\hat\theta$ and $\hat\theta^*$, respectively. Upon substituting these estimates into $\eqref{eq:mainconf}$ we obtain the <i> basic bootstrap interval </i> which is $$(2\hat\theta - t^*_{(B + 1)(1 - \alpha/2)}, 2\hat\theta - t^*_{(B + 1)(\alpha/2)}),$$
 
-where $B$ is the number of bootstrap resamples. The use of the $(B+1)*p$ largest value for the $p$-th quantile is suggested by @davison1997bootstrap as a more reasonable option that the $p$-th quantile. It is noted by @carpenter2000bootstrap that there is substantial coverage error when the distributions of $\hat\theta - \theta$ and $\hat\theta^* - \hat\theta$ differ significantly. 
+where $B$ is the number of bootstrap resamples. The use of the $(B+1)*p$ largest value for the $p$-th quantile is suggested by @davison1997bootstrap as a more reasonable option that the $p$-th quantile. It should be noted that there is substantial coverage error when the distributions of $\hat\theta - \theta$ and $\hat\theta^* - \hat\theta$ differ significantly. 
 
 <b> Percentile Bootstrap Interval </b>
 
-If the distribution of $\hat\theta - \theta$ is symmetric then $-a_{1 -\alpha/2} = a_{\alpha/2}$ and due to the symmetry the bootstrap estimates for $a_{1-\alpha/2}$ and $a_{\alpha/2}$ may be denoted as $a^*_{\alpha/2} = \hat\theta - t^*_{1 -\alpha/2}$ and $a^*_{1-\alpha/2} = \hat\theta - t^*_{\alpha/2}$ where $t^*_p$ is the $p$-th quantile of the distribution of bootstrap sample statistics. Therefore, $\eqref{eq:mainconf}$ becomes $(t^*_{(B+1)(\alpha/2)}, t^*_{(B+1)(1-\alpha/2)})$ and this is the <i> percentile bootstrap interval </i>. It is noted by @carpenter2000bootstrap that the simplicity of this method contributes to its attractivness and that it is transformation respecting but one should be weary in applying it if the distribution of $\hat\theta$ is not nearly symmetric as it can have low coverage. Also, @hesterberg2015teachers notes that this method is less accurate than $t$-intervals for sample sizes of 34 or smaller. 
+If the distribution of $\hat\theta - \theta$ is symmetric then $-a_{1 -\alpha/2} = a_{\alpha/2}$ and due to the symmetry the bootstrap estimates for $a_{1-\alpha/2}$ and $a_{\alpha/2}$ may be denoted as $a^*_{\alpha/2} = \hat\theta - t^*_{1 -\alpha/2}$ and $a^*_{1-\alpha/2} = \hat\theta - t^*_{\alpha/2}$ where $t^*_p$ is the $p$-th quantile of the distribution of bootstrap sample statistics. Therefore, $\eqref{eq:mainconf}$ becomes $(t^*_{(B+1)(\alpha/2)}, t^*_{(B+1)(1-\alpha/2)})$ and this is the <i> percentile bootstrap interval </i>. The simplicity of this method makes it desirable from a pedagogical standpoint but one should be weary in applying it if the distribution of $\hat\theta$ is not nearly symmetric as it can have low coverage.
 
 <b> Studentized Bootstrap Interval </b>
 
-The <i> studentized bootstrap interval </i> attempts to lower the coverage error of the basic bootstrap interval. Under the assumption of normality in the sampling distribution of $\hat\theta$ a confidence interval for $\theta$ is $$\hat\theta \pm z_{1-\alpha/2} \sqrt{Var(\hat\theta)}.$$
-
-The normality assumption may not hold and $Var(\hat\theta)$ is usually unknown but these can be estimated using bootstrapping. Let $z^*_p$ be the $p$-th quantile of the distribution $$z^* = \frac{\hat\theta^* - \hat\theta}{\hat{\sigma}^*},$$ $\hat{\sigma}$ be an estimate for the standard deviation of $\hat\theta$, and $\hat{\sigma}^*$ be an estimate of the standard deviation of $\hat\theta^*$. This leads to $(1-\alpha)$ equi-tailed interval of the form $$\left(\hat\theta - z^*_{1-\alpha/2}\hat{\sigma},~~ \hat\theta - z^*_{\alpha/2}\hat{\sigma}\right).$$ An estimate for the variance of $\hat\theta$ is $$\hat\sigma^2 = \frac{1}{B-1}\displaystyle\sum_{i=1}^B(\hat\theta_i^* - \hat\theta)^2$$ and the second level bootstrap recommended by @hesterberg2015teachers, @carpenter2000bootstrap and @davison1997bootstrap can be used to obtain $\hat{\sigma}^*$. It is noted by @carpenter2000bootstrap that this method performs poorly if $\hat\sigma$ is not independent of $\hat\theta$ but @davison1997bootstrap note that this method intrinsically results in better accuracy than the basic and percentile bootstrap intervals. 
+Using normal approximation a confidence interval for $\theta$ is given as $\hat\theta \pm z_{1-\alpha/2} \sqrt{\hat{\sigma}^2}$. Each of the needed values can be estimated through bootstrapping: the critical value, $z_{1-\alpha/2}$, is estimated with $z^*_p$, the $p$-th quantile of the distribution of $$z^* = \frac{\hat\theta^* - \hat\theta}{\hat{\sigma}^*}$$ where $\hat{\sigma}^*$ is an estimate of the standard deviation of $\hat\theta^*$ and $\hat{\sigma}$ is an estimate for the standard deviation of $\hat\theta$ which uses the bootstrap sample statistics and the original sample statistic. This leads to $(1-\alpha)$ equi-tailed interval of the form $$\left(\hat\theta - z^*_{(B+1)(1-\alpha/2)}\hat{\sigma},~~ \hat\theta - z^*_{(B+1)(\alpha/2)}\hat{\sigma}\right).$$
 
 ## Baby Names Example
 
@@ -220,7 +218,7 @@ for(i in 1:1000){ # repeat 1000 times and save each time
 
 ```
 
-The histogram below is the sampling distribution of the sample statistic. It is roughly centered at the population proportion due to the Central Limit Theorem and will be more so as we increase the sample size. 
+The histogram below is the approximate sampling distribution of the sample statistic. It is roughly centered at the population proportion due to the Central Limit Theorem and will be more so as we increase the sample size. 
 
 ```{r}
 
