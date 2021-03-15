@@ -39,7 +39,7 @@ To get started with bootEd you simply need to supply the vector of data that you
 percentileMBI(sample = mtcars$mpg, parameter = "mean")
 ```
 
-![](README_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![](unnamed-chunk-3-1.png)<!-- -->
 
 ```
 ## The percentile basic bootstrap interval for the mean is: (18.13125, 22.31875).
