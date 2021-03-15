@@ -7,7 +7,11 @@ output:
     keep_md: TRUE
 ---
 
+```{r setup, include=FALSE}
 
+knitr::opts_chunk$set(echo = TRUE)
+
+```
 
 # bootEd
 
@@ -17,42 +21,35 @@ The package bootEd was created to facilitate the teaching of bootstrap intervals
 
 To install bootEd from GitHub, where it is hosted, first ensure that devtools is installed and then use `install_github()` to install the package. bootEd is a very light-weight package in the sense that it only has three functions and no stated dependencies. This was done on purpose to ensure that students would be able to download it and get started quickly without having to go to far down an installation trail. 
 
+```{r, eval = FALSE}
 
-```r
 install.packages("devtools")
 devtools::install_github("tottyn/bootEd")
+
 ```
 
 Once the package is installed load it for use:
 
+```{r}
 
-```r
 library(bootEd)
+
 ```
 
 # Usage
 
 To get started with bootEd you simply need to supply the vector of data that you want to bootstrap from and the parameter of interest defined as a function (in base R or user-defined). Other arguments, such as the number of bootstrap samples and the significance level can be specified or left at their default values. Let us use the well-known base R dataset 'mtcars' for an example. We construct 95% percentile bootstrap intervals for the mean mpg. Each of the functions in the pacakge returns similar output specific to the intervals assumptions and plots needed to discuss those assumptions.
 
+```{r}
 
-```r
 percentileMBI(sample = mtcars$mpg, parameter = "mean")
-```
 
-![](README_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
-
-```
-## The percentile basic bootstrap interval for the mean is: (18.13125, 22.31875).
-## 
-## If it is not reasonable to assume that the sampling 
-## distribution of the statistic of interest is symmetric 
-## this method should not be used.
 ```
 
 The functions can also be used for simulation purposes by setting the argument `onlyint = TRUE`. This will print only the bootstrap interval making it easy to check for containment. Take the following simulation for example. We obtain 1000 percentile bootstrap intervals for the population mean using samples of size 30 from a Binomial(10, 0.25) population. 950 of the confidence intervals should contain the true population mean which is 2.5. 
 
+```{r}
 
-```r
 contained <- logical(1000)
 
 for(i in 1:1000){
@@ -62,19 +59,10 @@ for(i in 1:1000){
 
 # number of intervals that capture the true parameter
 sum(contained)
-```
 
-```
-## [1] 945
-```
-
-```r
 # coverage proportion
 mean(contained)
-```
 
-```
-## [1] 0.945
 ```
 
 # Contributing
