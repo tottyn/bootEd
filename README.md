@@ -1,13 +1,3 @@
----
-title: "README"
-author: "Njesa Anna Totty"
-date: "March 15, 2021"
-output: 
-  html_document:
-    keep_md: TRUE
----
-
-
 
 # bootEd
 
