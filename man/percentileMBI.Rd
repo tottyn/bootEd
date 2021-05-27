@@ -14,7 +14,7 @@ percentileMBI(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE)
 }
 
 \arguments{
-  \item{sample}{a numeric vector of data which the user desires to bootstrap from}
+  \item{sample}{a vector of data which the user desires to bootstrap from}
 
   \item{parameter}{the name of a pre-defined (possibly user-written) function in quotes whose output is one value (e.g. mean, min, max, median)}
 
@@ -28,8 +28,12 @@ percentileMBI(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE)
 
 \value{
 
-A histogram of the bootstrap sample statistics (with a line at the original observed sample statistic) is plotted and an interval with instructions on how to check the assumptions of the percentile method is printed.
+If onlyint is set to FALSE:
+Histogram of the bootstrap sample statistics (with a line at the original observed sample statistic).
 
+and (or if onlyint is set to TRUE):
+The bootstrap interval with a statement about the assumptions and conditions of this method.
+  
 }
 
 \author{
