@@ -16,19 +16,19 @@ load_all()
 
 
 ## ---- eval = FALSE------------------------------------------------------------
-#  
+#
 #  # install devtools in order to use the install_github function (skip if you already have it, comment out once installed)
 #  install.packages(devtools)
-#  
+#
 #  # load devtools
 #  library(devtools)
-#  
+#
 #  # install bootEd from GitHub
 #  install_github("tottyn/bootEd")
-#  
+#
 #  # load bootEd
 #  library(bootEd)
-#  
+#
 
 ## -----------------------------------------------------------------------------
 
@@ -46,6 +46,14 @@ data("babynames")
 
 # view the first six lines of the babynames dataset
 head(babynames)
+
+## -----------------------------------------------------------------------------
+
+babynames <- rbind(read.csv(system.file("extdata", "babynames1.csv", package = "bootEd")),
+                   read.csv(system.file("extdata", "babynames2.csv", package = "bootEd")),
+                   read.csv(system.file("extdata", "babynames3.csv", package = "bootEd")),
+                   read.csv(system.file("extdata", "babynames4.csv", package = "bootEd"))
+)
 
 
 ## -----------------------------------------------------------------------------
@@ -96,16 +104,16 @@ sum(babies2012sample$sex == "F")/length(babies2012sample$sex)
 babyprops <- numeric(1000)
 
 for(i in 1:1000){ # repeat 1000 times and save each time
-  
+
   # generate a random sample of 35 indices
   sampindices_loop <- sample(1:nrow(babies2012expanded), 35, replace = FALSE)
-  
+
   # subset the dataset using the random sample of indices
   babies2012sample_loop <- babies2012expanded[sampindices_loop,]
-  
+
   # total number of female babies in sample divided by total number of babies in sample
   babyprops[i] <- sum(babies2012sample_loop$sex == "F")/length(babies2012sample_loop$sex)
-  
+
 }
 
 
@@ -183,17 +191,17 @@ percentileMBI(sample = samp, parameter = "var", B = 999, siglevel = 0.05)
 contained <- logical(1000)
 
 for(i in 1:1000){ # repeat 1000 times and save each time
-  
+
   # set the working sample as the ith column of the matrix that had 1000 samples
   samp_loop <- expmat[,i]
-  
+
   # construct an interval using that sample
-  interval <- percentileMBI(sample = samp_loop, parameter = "var", B = 999, 
+  interval <- percentileMBI(sample = samp_loop, parameter = "var", B = 999,
                             siglevel = 0.05, onlyint = TRUE)
-  
+
   # check that 0.25 is within the bounds of the interval - if so this returns TRUE or else it returns FALSE
   contained[i] <- interval[1] <= 0.25 & interval[2] >= 0.25
-  
+
 }
 
 # determine the proportion of intervals that contained the true parameter - that is, the proportion of TRUE's
