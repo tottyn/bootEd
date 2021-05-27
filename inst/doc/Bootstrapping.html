@@ -12,7 +12,7 @@
 
 
 
-<title>Bootstrapping: Constructing Bootstrap Intervals</title>
+<title>Constructing Bootstrap Intervals</title>
 
 
 
@@ -88,7 +88,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Bootstrapping: Constructing Bootstrap Intervals</h1>
+<h1 class="title toc-ignore">Constructing Bootstrap Intervals</h1>
 
 
 
@@ -99,7 +99,7 @@ MathJax.Hub.Config({
 </script>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>The bootstrap is a very useful resampling method for constructing interval estimates when the conditions for more common methods are not met or the parameter of interest is not common. In order to properly implement bootstrapping we first need to obtain a sample that is representative of the population of interest. If the original sample is not representative of this population then the resamples will not mimic the process of sampling from the population and our results will not be meaningful. Once we have a representative sample we can proceed to implement bootstrap methods and check the assumptions of those methods to determine which is most appropriate for achieving our overall objective. We will discuss the three main bootstrap intervals which are the basic, percentile, and studentized bootstrap intervals as well as their underlying assumptions. Later we will walk through examples of how to use the package <code>bootEd</code> to obtain bootstrap intervals using these methods.</p>
+<p>When we have an independent random sample that is representative of the population we can implement simple bootstrapping procedures for constructing bootstrap intervals. We will discuss the three main bootstrap intervals which are the basic, percentile, and studentized bootstrap intervals as well as their underlying assumptions. Later we will walk through examples of how to use the package <code>bootEd</code> to obtain bootstrap intervals using these methods.</p>
 <p>To install <code>bootEd</code> use the following chunk of code:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="co"># install devtools in order to use the install_github function (skip if you already have it, comment out once installed)</span>
@@ -132,7 +132,7 @@ MathJax.Hub.Config({
 </div>
 <div id="baby-names-example" class="section level2">
 <h2>Baby Names Example</h2>
-<p>To implement these methods using <code>bootEd</code> we will use a dataset titled <code>babynames</code> which can be found in the <code>babynames</code> package. This dataset contains information on the occurrence of babynames (with at least 5 uses) from the years 1880 to 2017 and is provided by the Social Security Administration (SSA). Note that we are using a dataset that contains information on the entire population so we already know the population parameters. Though this is not usually the case, using data on the entire population will allow us to determine if our interval captures the true parameter value and assess the assumptions that pertain to the population.</p>
+<p>To implement these methods using <code>bootEd</code> we use the dataset <code>babynames</code> from the <code>babynames</code> package. This dataset contains information on the occurrence of babynames (with at least 5 uses) from the years 1880 to 2017 and is provided by the Social Security Administration (SSA). Note that we are using a dataset that contains information on the entire population so we already know the population parameters. Though this is not usually the case, using data on the entire population will allow us to determine if our interval captures the true parameter value and assess the assumptions that pertain to the population.</p>
 <p>The variables included in the entire dataset are:</p>
 <ul>
 <li>year: year of application</li>
@@ -142,7 +142,6 @@ MathJax.Hub.Config({
 <li>prop: n divided by the total number of applicants in that year (proportion of people of that gender with that name of all people born in that year)</li>
 </ul>
 <p>Begin by installing and loading the <code>babynames</code> package and dataset.</p>
-<!-- Shall we include a saved .csv file of this dataset (either on Canvas just for the purposes of teaching it, or in bootEd, or both) for those that have trouble installing the pacakge? -->
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="co"># uncomment the lines of code below to install the babynames package</span>
 <span class="co">#install.packages(&quot;babynames&quot;)</span>
@@ -167,6 +166,14 @@ MathJax.Hub.Config({
 <span class="co"># 4  1880 F     Elizabeth  1939 0.0199</span>
 <span class="co"># 5  1880 F     Minnie     1746 0.0179</span>
 <span class="co"># 6  1880 F     Margaret   1578 0.0162</span></code></pre></div>
+<p>If you have trouble installing the <code>babynames</code> pacakge using the code above you can also extract it from the <code>bootEd</code> package system files using the code below.</p>
+<pre><code>
+babynames &lt;- rbind(read.csv(system.file(&quot;extdata&quot;, &quot;babynames1.csv&quot;, package = &quot;bootEd&quot;)),
+                   read.csv(system.file(&quot;extdata&quot;, &quot;babynames2.csv&quot;, package = &quot;bootEd&quot;)),
+                   read.csv(system.file(&quot;extdata&quot;, &quot;babynames3.csv&quot;, package = &quot;bootEd&quot;)),
+                   read.csv(system.file(&quot;extdata&quot;, &quot;babynames4.csv&quot;, package = &quot;bootEd&quot;))
+                   )
+</code></pre>
 <p>We are interested in eliciting information about the proportion of babies born in the US in 2012 that were female. First we need to subset the dataset and extract information for the year 2012 only.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="co"># subset the entire dataset to only those observations that occured in the year 2012</span>
@@ -377,7 +384,7 @@ contained &lt;-<span class="st"> </span><span class="kw">logical</span>(<span cl
 </div>
 <div id="conclusions" class="section level2">
 <h2>Conclusions</h2>
-<p>The bootstrap intervals that we have discussed are widely used in many more complex applications so it is important to have a solid understanding of the underlying ideas. The aim of <code>bootEd</code> is to foster a good understanding of the basic bootstrap interval and its derivatives while also remembering that there are underlying assumptions to these intervals. In the last example we saw that it is important to check the assumptions of each method as thoroughly as possible in order to ensure valid results. It should also be noted that in the last example the distribution of bootstrap sample statistics was not as skewed as the approximate sampling distribution so users of the bootstrap should be aware that though it attempts to generate and use a distribution similar to the sampling distribution but this goal is not always achieved and the two are not completely exchangeable, especially when the assumptions are not met. That being said, when these bootstrap intervals are used correctly they are a powerful tool for quantifying the uncertainty in an estimate and can greatly influence the results of ones analysis in a positive way.</p>
+<p>The bootstrap intervals that we have discussed are widely used in many more complex applications so it is important to have a solid understanding of the underlying ideas. The aim of <code>bootEd</code> is to foster a good understanding of the bootstrap intervals discussed while also remembering that there are underlying assumptions to these intervals. In the last example we saw that it is important to check the assumptions of each method as thoroughly as possible in order to ensure valid results. It should also be noted that in the last example the distribution of bootstrap sample statistics was not as skewed as the approximate sampling distribution. Users of the bootstrap should be aware that its estimate of the sampling distribution is not exactly exchangeable with the actual sampling distribution, especially when the assumptions are not met. That being said, when these bootstrap intervals are used correctly they are a powerful tool for quantifying the uncertainty in an estimate and can greatly influence the results of ones analysis in a positive way.</p>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2>References</h2>
