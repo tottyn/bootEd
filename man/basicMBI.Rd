@@ -25,15 +25,7 @@ basicMBI(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE)
 
 \value{
 
-If onlyint is set to FALSE:
-  
-Histogram of the bootstrap sample statistics (with a line at the original observed sample statistic).
-  
-Histogram of the bootstrap sample statistics shifted by the original sample statistic.
-
-and (or if onlyint is set to TRUE):
-     
-The bootstrap interval with a statement about the assumptions and conditions of this method.
+If onlyint is set to FALSE, a histogram of the bootstrap sample statistics (with a line at the original observed sample statistic), a histogram of the bootstrap sample statistics shifted by the original sample statistic, and (or if onlyint is set to TRUE) the bootstrap interval with a statement about the assumptions and conditions of this method.
 
 }
 
