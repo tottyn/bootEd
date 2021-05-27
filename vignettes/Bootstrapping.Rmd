@@ -119,7 +119,7 @@ head(babynames)
 
 If you have trouble installing the `babynames` pacakge using the code above you can also extract it from the `bootEd` package system files using the code below.
 
-```
+```{r}
 
 babynames <- rbind(read.csv(system.file("extdata", "babynames1.csv", package = "bootEd")),
                    read.csv(system.file("extdata", "babynames2.csv", package = "bootEd")),
