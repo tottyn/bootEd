@@ -52,7 +52,7 @@ percentileMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint =
     abline(v = ogstat, col = "red", lwd = 3)
 
     # print results of confidence interval
-    cat("The percentile basic bootstrap interval for the", parameter, "is: ")
+    cat("The percentile bootstrap interval for the", parameter, "is: ")
     cat("(", interval[1], ", ", interval[2], ").\n", sep = "")
     cat("\nIf it is not reasonable to assume that the sampling \ndistribution of the statistic of interest is symmetric \nthis method should not be used.")
 
@@ -204,7 +204,7 @@ studentizedMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint 
          xlab = paste(parameter), ylab = "SE", pch = 19)
 
     # print results
-    cat("The studentized basic bootstrap interval for the", parameter, "is: ")
+    cat("The studentized bootstrap interval for the", parameter, "is: ")
     cat("(", interval[1], ", ", interval[2], ").\n", sep = "")
     cat("Use the second plot returned to determine if it is reasonable to assume independence \nbetween the standard error and statistic of each bootstrap sample.")
 
