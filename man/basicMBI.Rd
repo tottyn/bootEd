@@ -11,7 +11,7 @@ basicMBI(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE)
 }
 
 \arguments{
-  \item{sample}{a numeric vector of data which the user desires to bootstrap from}
+  \item{sample}{a vector of data which the user desires to bootstrap from}
 
   \item{parameter}{the name of a pre-defined (possibly user-written) function in quotes whose output is one value (e.g. mean, min, max, median)}
 
@@ -25,7 +25,13 @@ basicMBI(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE)
 
 \value{
 
-Histograms of the bootstrap sample statistics (with a line at the original observed sample statistic) and the bootstrap sample statistics shifted by the original sample statistic are plotted and an interval with a statement about the assumptions of this method are also printed.
+If onlyint is set to FALSE:
+Histogram of the bootstrap sample statistics (with a line at the original observed sample statistic).
+  
+Histogram of the bootstrap sample statistics shifted by the original sample statistic.
+
+and (or if onlyint is set to TRUE):
+The bootstrap interval with a statement about the assumptions and conditions of this method.
 
 }
 
