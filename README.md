@@ -32,7 +32,7 @@ percentileMBI(sample = mtcars$mpg, parameter = "mean")
 ![](unnamed-chunk-3-1.png)<!-- -->
 
 ```
-## The percentile basic bootstrap interval for the mean is: (18.13125, 22.31875).
+## The percentile bootstrap interval for the mean is: (18.13125, 22.31875).
 ## 
 ## If it is not reasonable to assume that the sampling 
 ## distribution of the statistic of interest is symmetric 
