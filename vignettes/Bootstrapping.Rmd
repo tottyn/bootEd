@@ -1,5 +1,5 @@
 ---
-title: "Bootstrapping: Constructing  Bootstrap Intervals"
+title: "Constructing  Bootstrap Intervals"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Constructing  Bootstrap Intervals}
@@ -38,7 +38,7 @@ MathJax.Hub.Config({
 
 ## Introduction
 
-The bootstrap is a very useful resampling method for constructing interval estimates when the conditions for more common methods are not met or the parameter of interest is not common. In order to properly implement bootstrapping we first need to obtain a sample that is representative of the population of interest. If the original sample is not representative of this population then the resamples will not mimic the process of sampling from the population and our results will not be meaningful. Once we have a representative sample we can proceed to implement bootstrap methods and check the assumptions of those methods to determine which is most appropriate for achieving our overall objective. We will discuss the three main bootstrap intervals which are the basic, percentile, and studentized bootstrap intervals as well as their underlying assumptions. Later we will walk through examples of how to use the package `bootEd` to obtain bootstrap intervals using these methods. 
+When we have an independent random sample that is representative of the population we can implement simple bootstrapping procedures for constructing bootstrap intervals. We will discuss the three main bootstrap intervals which are the basic, percentile, and studentized bootstrap intervals as well as their underlying assumptions. Later we will walk through examples of how to use the package `bootEd` to obtain bootstrap intervals using these methods. 
 
 To install `bootEd` use the following chunk of code: 
 
@@ -86,7 +86,7 @@ Using normal approximation a confidence interval for $\theta$ is given as $\hat\
 
 ## Baby Names Example
 
-To implement these methods using `bootEd` we will use a dataset titled `babynames` which can be found in the `babynames` package. This dataset contains information on the occurrence of babynames (with at least 5 uses) from the years 1880 to 2017 and is provided by the Social Security Administration (SSA). Note that we are using a dataset that contains information on the entire population so we already know the population parameters. Though this is not usually the case, using data on the entire population will allow us to determine if our interval captures the true parameter value and assess the assumptions that pertain to the population.
+To implement these methods using `bootEd` we use the dataset `babynames` from the `babynames` package. This dataset contains information on the occurrence of babynames (with at least 5 uses) from the years 1880 to 2017 and is provided by the Social Security Administration (SSA). Note that we are using a dataset that contains information on the entire population so we already know the population parameters. Though this is not usually the case, using data on the entire population will allow us to determine if our interval captures the true parameter value and assess the assumptions that pertain to the population.
 
 The variables included in the entire dataset are:
 
@@ -97,8 +97,6 @@ The variables included in the entire dataset are:
 - prop: n divided by the total number of applicants in that year (proportion of people of that gender with that name of all people born in that year)
 
 Begin by installing and loading the `babynames` package and dataset. 
-
-<!-- Shall we include a saved .csv file of this dataset (either on Canvas just for the purposes of teaching it, or in bootEd, or both) for those that have trouble installing the pacakge? -->
 
 ```{r}
 
@@ -116,6 +114,18 @@ data("babynames")
 
 # view the first six lines of the babynames dataset
 head(babynames)
+
+```
+
+If you have trouble installing the `babynames` pacakge using the code above you can also extract it from the `bootEd` package system files using the code below.
+
+```
+
+babynames <- rbind(read.csv(system.file("extdata", "babynames1.csv", package = "bootEd")),
+                   read.csv(system.file("extdata", "babynames2.csv", package = "bootEd")),
+                   read.csv(system.file("extdata", "babynames3.csv", package = "bootEd")),
+                   read.csv(system.file("extdata", "babynames4.csv", package = "bootEd"))
+                   )
 
 ```
 
@@ -379,7 +389,7 @@ mean(contained)
 
 ## Conclusions
 
-The bootstrap intervals that we have discussed are widely used in many more complex applications so it is important to have a solid understanding of the underlying ideas. The aim of `bootEd` is to foster a good understanding of the basic bootstrap interval and its derivatives while also remembering that there are underlying assumptions to these intervals. In the last example we saw that it is important to check the assumptions of each method as thoroughly as possible in order to ensure valid results. It should also be noted that in the last example the distribution of bootstrap sample statistics was not as skewed as the approximate sampling distribution so users of the bootstrap should be aware that though it attempts to generate and use a distribution similar to the sampling distribution but this goal is not always achieved and the two are not completely exchangeable, especially when the assumptions are not met. That being said, when these bootstrap intervals are used correctly they are a powerful tool for quantifying the uncertainty in an estimate and can greatly influence the results of ones analysis in a positive way.  
+The bootstrap intervals that we have discussed are widely used in many more complex applications so it is important to have a solid understanding of the underlying ideas. The aim of `bootEd` is to foster a good understanding of the bootstrap intervals discussed while also remembering that there are underlying assumptions to these intervals. In the last example we saw that it is important to check the assumptions of each method as thoroughly as possible in order to ensure valid results. It should also be noted that in the last example the distribution of bootstrap sample statistics was not as skewed as the approximate sampling distribution. Users of the bootstrap should be aware that its estimate of the sampling distribution is not exactly exchangeable with the actual sampling distribution, especially when the assumptions are not met. That being said, when these bootstrap intervals are used correctly they are a powerful tool for quantifying the uncertainty in an estimate and can greatly influence the results of ones analysis in a positive way.  
 
 ## References
 
