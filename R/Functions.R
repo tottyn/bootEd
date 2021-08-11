@@ -117,7 +117,7 @@ basicMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALS
     # print out confidence intervals
     cat("The basic bootstrap interval for the", parameter, "is: ")
     cat("(", interval[1], ", ", interval[2], ").\n", sep = "")
-    cat("\nIf there is a constraint on the values that the parameter \ncan take or a nonlinear transformation was applied to the \nparameter this method should not be used. \n \nIf the shifted sampling distribution differs significantly \nfrom the shifted bootstrap distribution in theory this \nmethod should not be used.")
+    cat("\nIf there is a constraint on the values that the parameter \ncan take check that the bounds of the interval returned meet this constraint. \n \nIf the shifted sampling distribution differs significantly \nfrom the shifted bootstrap distribution in theory, this \nmethod should not be used.")
 
   }
 
@@ -199,14 +199,14 @@ studentizedMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint 
     abline(v = ogstat, col = "red", lwd = 3)
 
     # plot to check conditions
-    plot(stats, sqrt(lowervar),
-         main = "Bootstrap sample statistic vs. \nsecond level bootstrap sample standard error",
-         xlab = paste(parameter), ylab = "SE", pch = 19)
+    hist(z, main = "Standardized bootstrap distribution",
+         xlab = paste("standardized", parameter), pch = 19, prob = T)
+    lines(seq(-3, 3, length.out = 100), dnorm(seq(-3, 3, length.out = 100)))
 
     # print results
     cat("The studentized bootstrap interval for the", parameter, "is: ")
     cat("(", interval[1], ", ", interval[2], ").\n", sep = "")
-    cat("Use the second plot returned to determine if it is reasonable to assume independence \nbetween the standard error and statistic of each bootstrap sample.")
+    cat("If it is not reasonable to assume that the standardized sampling distribution is N(0,1) \nand that the bootstrap analogue well approximates it then this method should not be used. ")
 
   }
 
