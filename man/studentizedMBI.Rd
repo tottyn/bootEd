@@ -29,10 +29,10 @@ studentizedMBI(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE, M =
 
 \value{
 
-If \code{onlyint} is set to \code{FALSE} items returned are: a histogram of the bootstrap sample statistics (with a line at the original observed sample statistic), a scatterplot of the bootstrap sample statistics versus their corresponding estimated sample variances (using a second level bootstrap), and the bootstrap interval with a statement about the assumptions and conditions of this method.  
+If onlyint is set to FALSE, a histogram of the bootstrap sample statistics (with a line at the original observed sample statistic), a histogram of the standardized bootstrap sample statistics (using a second level bootstrap variance estimates), and the bootstrap interval with a statement about the assumptions and conditions of this method. The second returned plot has a Normal(0,1) density overlaid for comparison.
 
-If \code{onlyint} is set to \code{TRUE}, only the bootstrap interval is printed.    
-  
+If onlyint is set to TRUE, just the bootstrap interval is printed.
+
 }
 
 \author{
