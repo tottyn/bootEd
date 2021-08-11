@@ -82,7 +82,7 @@ If the distribution of $\hat\theta - \theta$ is symmetric then $-a_{1 -\alpha/2}
 
 <b> Studentized Bootstrap Interval </b>
 
-Using normal approximation a confidence interval for $\theta$ is given as $\hat\theta \pm z_{1-\alpha/2} \sqrt{\hat{\sigma}^2}$. Each of the needed values can be estimated through bootstrapping: the critical value, $z_{1-\alpha/2}$, is estimated with $z^*_p$, the $p$-th quantile of the distribution of $$z^* = \frac{\hat\theta^* - \hat\theta}{\hat{\sigma}^*}$$ where $\hat{\sigma}^*$ is an estimate of the standard deviation of $\hat\theta^*$ and $\hat{\sigma}$ is an estimate for the standard deviation of $\hat\theta$ which uses the bootstrap sample statistics and the original sample statistic. This leads to $(1-\alpha)$ equi-tailed interval of the form $$\left(\hat\theta - z^*_{(B+1)(1-\alpha/2)}\hat{\sigma},~~ \hat\theta - z^*_{(B+1)(\alpha/2)}\hat{\sigma}\right).$$
+Using normal approximation a confidence interval for $\theta$ can be constructed. Each of the needed values can be estimated through bootstrapping: the critical value, $z_{1-\alpha/2}$, is estimated with $z^*_p$, the $p$-th quantile of the distribution of $$z^* = \frac{\hat\theta^* - \hat\theta}{\hat{\sigma}^*}$$ where $\hat{\sigma}^*$ is an estimate of the standard deviation of $\hat\theta^*$ and $\hat{\sigma}$ is an estimate for the standard deviation of $\hat\theta$ which uses the bootstrap sample statistics and the original sample statistic. This leads to $(1-\alpha)$ equi-tailed interval of the form $$\left(\hat\theta - z^*_{(B+1)(1-\alpha/2)}\hat{\sigma},~~ \hat\theta - z^*_{(B+1)(\alpha/2)}\hat{\sigma}\right).$$
 
 ## Baby Names Example
 
@@ -277,8 +277,14 @@ proportion(test)
 
 The function `basicMBI` returns the interval with instructions on what assumptions to consider, a histogram of the bootstrap sample statistics, and a histogram of the shifted bootstrap distribution. For more understanding it is important to pay attention to the labels of these plots and to discuss the assumptions of the method used. It is possible for just the interval to be returned without the histogram or prompt to check assumptions if the argument `onlyint` is set to `TRUE`.
 
-```{r}
+```{r, include = FALSE}
 
+set.seed(340)
+
+```
+ 
+
+```{r}
 # bootstrap interval using the percentile method and original sample taken
 basicMBI(sample = babies2012sample$sex, parameter = "proportion", B = 999, siglevel = 0.05)
 
@@ -298,7 +304,7 @@ basicMBI(sample = babies2012sample$sex, parameter = "proportion", B = 999, sigle
 
 <hr style="border: 1px dashed black;" />
 
-Since we are using population data we can actually make a comparison between the shifted sampling distribution of the sample statistic and the shifted bootstrap distirbution. Recall that we constructed an approximate sampling distribution earlier. After shifting that distribution by the population proportion, in the histogram below, we can compare it to the shifted bootstrap distribution above.
+Since we are using population data we can actually make a comparison between the shifted sampling distribution of the sample statistic and the shifted bootstrap distirbution. Recall that we constructed an approximate sampling distribution earlier. After shifting that distribution by the population proportion, in the histogram below, we can compare it to the shifted bootstrap distribution above. Does the shifted bootstrap distribution well approximate the shifted sampling distribution? Are any invalid values included in the interval?
 
 ```{r}
 
@@ -315,7 +321,7 @@ percentileMBI(sample = babies2012sample$sex, parameter = "proportion", B = 999, 
 
 ```
 
-Similarly, `studentizedMBI` returns the same output as well as a scatterplot of the estimated variance of the bootstrap sample statistic (using a second-level bootstrap) and the bootstrap sample statistic. 
+Similarly, `studentizedMBI` returns the same output as well as a histogram of the standardized distributin of bootstrap sample statistic (using a second-level bootstrap variance estimate). 
 
 ```{r}
 
@@ -323,7 +329,7 @@ studentizedMBI(sample = babies2012sample$sex, parameter = "proportion", B = 999,
 
 ```
 
-The bounds of all the intervals are fairly close to each other and each of them captures the true parameter value. The assumptions of the basic bootstrap interval seem to be met somewhat well when comparing the shifted sampling distribution and the bootstrap distribution. Also, the distribution of bootstrap sample statistics is fairly symmetric so the assumptions of the percentile method are met well. That being said, the scatterplot of bootstrap sample statistics vs. second level bootstrap sample standard errors shows a slight negative trend indicating that the assumptions of the studentized method may not be fully met. We now proceed to a discussion on why checking these assumptions is necessary.
+The bounds of all the intervals are fairly close to each other and each of them captures the true parameter value. Though, the assumptions of each method are not perfectly met, the plots produced give no cause for alarm. We now proceed to a discussion on why checking these assumptions is necessary and what the output of these functions would look like when there is a cause for alarm.
 
 ## Why Check Assumptions?
 
@@ -389,7 +395,7 @@ mean(contained)
 
 ## Conclusions
 
-The bootstrap intervals that we have discussed are widely used in many more complex applications so it is important to have a solid understanding of the underlying ideas. The aim of `bootEd` is to foster a good understanding of the bootstrap intervals discussed while also remembering that there are underlying assumptions to these intervals. In the last example we saw that it is important to check the assumptions of each method as thoroughly as possible in order to ensure valid results. It should also be noted that in the last example the distribution of bootstrap sample statistics was not as skewed as the approximate sampling distribution. Users of the bootstrap should be aware that its estimate of the sampling distribution is not exactly exchangeable with the actual sampling distribution, especially when the assumptions are not met. That being said, when these bootstrap intervals are used correctly they are a powerful tool for quantifying the uncertainty in an estimate and can greatly influence the results of ones analysis in a positive way.  
+The bootstrap intervals that we have discussed are widely used in many more complex applications so it is important to have a solid understanding of the underlying ideas. The aim of `bootEd` is to foster a good understanding of the bootstrap intervals discussed while also remembering that there are underlying assumptions to these intervals. In the last example we saw that it is important to check the assumptions of each method as thoroughly as possible in order to ensure valid results. It should also be noted that in the last example the distribution of bootstrap sample statistics was not as skewed as the approximate sampling distribution. Users of the bootstrap should be aware that its estimate of the sampling distribution is not exactly exchangeable with the actual sampling distribution, especially when the assumptions are not met. That being said, when these bootstrap intervals are used correctly they are a powerful tool for quantifying the uncertainty in an estimate and can greatly influence the results of analyses in a positive way.  
 
 ## References
 
