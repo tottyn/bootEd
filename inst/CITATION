@@ -3,9 +3,9 @@ citHeader("To cite bootEd in publications use:")
 citEntry(entry = "Unpublished",
   title        = "Construct Bootstrap Intervals Using A Variety of Methods",
   author       = personList(as.person("Njesa Totty")),
-  year         = "2020",
-  note         = "The corresponding article is pending publication",
-  textVersion  = paste("Njesa Totty (2020).",
+  year         = "2021",
+  note         = "Pending publication",
+  textVersion  = paste("Njesa Totty (2021).",
         "bootEd : Construct Bootstrap Intervals Using A Variety of Methods."
   )
 
