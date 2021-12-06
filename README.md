@@ -1,22 +1,11 @@
 
 # bootEd
 
-The package bootEd was created to facilitate the teaching of bootstrap intervals in introductory statistics classrooms. It it written with easy-to-read syntax, communicative output, and vectorized coding in order to ensure that students can get started with the package easily. The percentile, basic, and student-ized bootstrap intervals as outlined by Davison, A., & Hinkley, D. (1997) are implemented.
-
-The package bootEd was written in such a way that it would communicate with the students and
-prompt them to actively apply these methods while taking the time to consider if assumptions are
-met and deciding on the next best course of action. We also wanted to ensure that students could
-get working quickly without having to specify or use other functions. We believe that bootEd has
-pedagogical benefits because of its user-friendliness, efficiency, easy-to-read syntax, and more. That
-being said, we note that bootEd was written for introductory statistics courses, therefore, for more
-complex bootstrapping processes, boot would be the superior option. In the next sections we make
-some comparisons between packages that are devoted entirely to bootstrapping so that teachers can
-begin to assess which package would be best for their teaching needs. The reader is encouraged to
-first read the main article to gain an understanding of the methods we will example here.
+The package `bootEd` was created to facilitate the teaching of bootstrap intervals with an emphasis on understanding their assumptions. The package was created for use in introductory statistics classrooms with undergraduate or graduate students. Package features include easy-to-read syntax, automatically generated output, and vectorized coding. These features were included so that students can get started with the package quickly and easily. The percentile, basic, and studentized bootstrap intervals as outlined by Davison, A., & Hinkley, D. (1997) and Efron, B., & Tibshirani, R.J. (1994) are implemented.
 
 # Installation
 
-To install bootEd from GitHub, where it is hosted, first ensure that devtools is installed and then use `install_github()` to install the package. bootEd is a very light-weight package in the sense that it only has three functions and no stated dependencies. This was done on purpose to ensure that students would be able to download it and get started quickly without having to go to far down an installation trail. 
+To install `bootEd` from GitHub, where it is hosted, first ensure that devtools is installed and then use `install_github()` to install the package. `bootEd` is a very light-weight package in the sense that it only has three functions and no stated dependencies. This was done on purpose so that students would be able to download it and get started learning with little to no difficulty. 
 
 
 ```r
@@ -24,7 +13,7 @@ install.packages("devtools")
 devtools::install_github("tottyn/bootEd")
 ```
 
-Once the package is installed load it for use:
+Once the package is installed, load it for use:
 
 
 ```r
@@ -33,7 +22,7 @@ library(bootEd)
 
 # Usage
 
-To get started with bootEd you simply need to supply the vector of data that you want to bootstrap from and the parameter of interest defined as a function (in base R or user-defined). Other arguments, such as the number of bootstrap samples and the significance level can be specified or left at their default values. Let us use the well-known base R dataset 'mtcars' for an example. We construct 95% percentile bootstrap intervals for the mean mpg. Each of the functions in the pacakge returns similar output specific to the intervals assumptions and plots needed to discuss those assumptions.
+To get started with bootEd you simply need to supply the vector of data that you want to bootstrap from and the parameter of interest defined as a function. The function should be a base R or user-defined summary function, such as mean, min, or median. Other arguments, such as the number of bootstrap samples and the significance level can be specified or left at their default values. Below we use the well-known base R dataset 'mtcars' for a minmum example. We construct 95% percentile bootstrap intervals for the mean mpg. Each of the functions in the package return similar output, specific to the interval's assumptions, and plots needed to discuss those assumptions.
 
 
 ```r
