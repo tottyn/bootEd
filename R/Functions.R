@@ -1,7 +1,7 @@
 
 # ====================================================================================== #
 
-percentileMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE){
+percentile <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE){
 
 
   # CREATE INITIAL BOOTSTRAP OBJECT
@@ -48,13 +48,13 @@ percentileMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint =
 
     # return a histogram of bootstrap sample statistics
     hist(stats, main = paste("Distribution of bootstrap \nsample statistics:", parameter),
-         xlab = paste(parameter, "of each bootstrap sample"))
+         xlab = paste("bootstrap", parameter))
     abline(v = ogstat, col = "red", lwd = 3)
 
     # print results of confidence interval
     cat("The percentile bootstrap interval for the", parameter, "is: ")
     cat("(", interval[1], ", ", interval[2], ").\n", sep = "")
-    cat("\nIf it is not reasonable to assume that the sampling \ndistribution of the statistic of interest is symmetric \nthis method should not be used.")
+    cat("\nIf it is reasonable to assume that the shifted sampling distribution of the \nstatistic of interest is symmetric and does not depend on any unknown parameters, \nsuch as the underlying population variance, then this method can be used.")
 
   }
 
@@ -62,7 +62,7 @@ percentileMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint =
 
 # ====================================================================================== #
 
-basicMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE){
+basic <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE){
 
   # CREATE INITIAL BOOTSTRAP OBJECT
 
@@ -108,16 +108,13 @@ basicMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALS
 
     # return a histogram of bootstrap sample statistics
     hist(stats, main = paste("Distribution of bootstrap \nsample statistics:", parameter),
-         xlab = paste(parameter, "of each bootstrap sample"))
+         xlab = paste("bootstrap", parameter))
     abline(v = ogstat, col = "red", lwd = 3)
-
-    # Plot histogram of differences
-    hist(diffs, main = "Shifted Bootstrap Distribution", xlab = paste("bootstrap sample", parameter, "-", "original sample", parameter))
 
     # print out confidence intervals
     cat("The basic bootstrap interval for the", parameter, "is: ")
     cat("(", interval[1], ", ", interval[2], ").\n", sep = "")
-    cat("\nIf there is a constraint on the values that the parameter \ncan take check that the bounds of the interval returned meet this constraint. \n \nIf the shifted sampling distribution differs significantly \nfrom the shifted bootstrap distribution in theory, this \nmethod should not be used.")
+    cat("\nIf it is reasonable to assume that the shifted sampling distribution of the \nstatistic of interest does not depend on any unknown parameters, \nsuch as the underlying population variance, then this method can be used.")
 
   }
 
@@ -125,7 +122,7 @@ basicMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALS
 
 # ====================================================================================== #
 
-studentizedMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE, M = 25){
+studentized <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE, M = 25){
 
   # CREATE INITIAL BOOTSTRAP OBJECT
 
@@ -163,7 +160,7 @@ studentizedMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint 
   # IMPLEMENT STUDENTIZED METHOD
 
   # estimate for variance of sample statistic
-  uppervar <- (1/(B - 1))*sum((stats - ogstat)^2)
+  uppervar <- (1/(B - 1))*sum((stats - mean(stats))^2)
 
   # estimate for variance of each bootstrap sample statistic using second level bootstrap
   lowervar <- numeric(B)
@@ -176,7 +173,7 @@ studentizedMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint 
     }
     slogstat <- stats[i]
     # calculate variance of second level bootstrap sample statistics
-    lowervar[i] <- (1/(M-1))*sum((slstats - slogstat)^2)
+    lowervar[i] <- (1/(M-1))*sum((slstats - mean(slstats))^2)
   }
 
   # distribution of mock z-statistics
@@ -195,18 +192,21 @@ studentizedMBI <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint 
 
     # return a histogram of bootstrap sample statistics
     hist(stats, main = paste("Distribution of bootstrap \nsample statistics:", parameter),
-         xlab = paste(parameter, "of each bootstrap sample"))
+         xlab = paste("bootstrap", parameter))
     abline(v = ogstat, col = "red", lwd = 3)
 
-    # plot to check conditions
-    hist(z, main = "Standardized bootstrap distribution",
-         xlab = paste("standardized", parameter), pch = 19, prob = T)
-    lines(seq(-3, 3, length.out = 100), dnorm(seq(-3, 3, length.out = 100)))
+    # plots to check conditions
+    hist(z, main = "Studentized bootstrap distribution",
+         xlab = paste("studentized", parameter), pch = 19)
+
+    # plot to check variance stabilized condition
+    plot(stats, sqrt(lowervar), main = "Bootstrap statistic vs estimated standard error \n(based on second-level bootstrap)", xlab = paste("bootstrap sample", parameter, sep = " "),
+         ylab = paste("estimated SE of", parameter))
 
     # print results
     cat("The studentized bootstrap interval for the", parameter, "is: ")
     cat("(", interval[1], ", ", interval[2], ").\n", sep = "")
-    cat("If it is not reasonable to assume that the standardized sampling distribution is N(0,1) \nand that the bootstrap analogue well approximates it then this method should not be used. ")
+    cat("\nIf it is reasonable to assume that the studentized sampling distribution of the \nstatistic of interest does not depend on any unknown parameters, \nthen this method can be used.")
 
   }
 
