@@ -3,6 +3,17 @@
 
 The package bootEd was created to facilitate the teaching of bootstrap intervals in introductory statistics classrooms. It it written with easy-to-read syntax, communicative output, and vectorized coding in order to ensure that students can get started with the package easily. The percentile, basic, and student-ized bootstrap intervals as outlined by Davison, A., & Hinkley, D. (1997) are implemented.
 
+The package bootEd was written in such a way that it would communicate with the students and
+prompt them to actively apply these methods while taking the time to consider if assumptions are
+met and deciding on the next best course of action. We also wanted to ensure that students could
+get working quickly without having to specify or use other functions. We believe that bootEd has
+pedagogical benefits because of its user-friendliness, efficiency, easy-to-read syntax, and more. That
+being said, we note that bootEd was written for introductory statistics courses, therefore, for more
+complex bootstrapping processes, boot would be the superior option. In the next sections we make
+some comparisons between packages that are devoted entirely to bootstrapping so that teachers can
+begin to assess which package would be best for their teaching needs. The reader is encouraged to
+first read the main article to gain an understanding of the methods we will example here.
+
 # Installation
 
 To install bootEd from GitHub, where it is hosted, first ensure that devtools is installed and then use `install_github()` to install the package. bootEd is a very light-weight package in the sense that it only has three functions and no stated dependencies. This was done on purpose to ensure that students would be able to download it and get started quickly without having to go to far down an installation trail. 
