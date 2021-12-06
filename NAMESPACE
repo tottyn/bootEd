@@ -1,3 +1,5 @@
 exportPattern("^[[:alpha:]]+")
 
-importFrom("graphics", "abline", "hist", "plot")
+importFrom("graphics", "abline", "hist", "plot", "lines")
+
+importFrom("stats", "dnorm")

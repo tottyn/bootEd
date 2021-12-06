@@ -4,12 +4,13 @@ Title: Construct Bootstrap Intervals Using A Variety of Methods
 Version: 0.1.0
 Author: Njesa Totty
 Maintainer: Njesa Totty <tottyn@oregonstate.edu>
-Description: A pedagogical R package created as a tool for teachers to use when introducing the simple bootstrap to students in introductory statistics courses. Allows users to implement the basic method, studentized method, and percentile method for the purposes of uncertainty quantification.
+Description: A pedagogical R package created as a tool for teachers to use when introducing the simple bootstrap to students in introductory statistics courses. Allows users to implement the basic, studentized, and percentile bootstrap intervals.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Imports: stats, graphics
 Depends: R (>= 3.1.0)
 Date: 2019-07-09
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2021-12-06 22:07:55 UTC; tottyn
