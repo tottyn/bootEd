@@ -195,13 +195,9 @@ studentized <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = F
          xlab = paste("bootstrap", parameter))
     abline(v = ogstat, col = "red", lwd = 3)
 
-    # plots to check conditions
+    # and studentized bootstrap distribution
     hist(z, main = "Studentized bootstrap distribution",
          xlab = paste("studentized", parameter), pch = 19)
-
-    # plot to check variance stabilized condition
-    plot(stats, sqrt(lowervar), main = "Bootstrap statistic vs estimated standard error \n(based on second-level bootstrap)", xlab = paste("bootstrap sample", parameter, sep = " "),
-         ylab = paste("estimated SE of", parameter))
 
     # print results
     cat("The studentized bootstrap interval for the", parameter, "is: ")
