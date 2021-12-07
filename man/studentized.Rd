@@ -27,7 +27,7 @@ studentized(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE, M = 25
 
 \value{
 
-If onlyint is set to FALSE, (1) a histogram of the bootstrap sample statistics, with a line at the observed sample statistic, (2) a histogram of the studentized bootstrap sample statistics, (3) a plot of bootstrap statistics vs second-level bootstrap estimates of standard error, and (4) the bootstrap interval are all returned.
+If onlyint is set to FALSE, (1) a histogram of the bootstrap sample statistics, with a line at the observed sample statistic, (2) a histogram of the studentized bootstrap sample statistics, and (3) the bootstrap interval are all returned.
 
 If onlyint is set to TRUE, only the bootstrap interval is returned as a numeric vector.
 
