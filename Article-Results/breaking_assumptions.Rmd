@@ -1,0 +1,3003 @@
+---
+title: "Breaking Assumptions 3"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# load required libraries
+library(tidyverse)
+library(robustbase)
+library(purrr)
+library(parallel)
+library(MASS)
+library(doParallel)
+library(devtools)
+#install_github("tottyn/bootEd")
+library(bootEd)
+library(latex2exp)
+library(xtable)
+
+# number of simulations
+nsim <- 10000
+
+# we use parallel computing
+numcores <- detectCores()
+registerDoParallel(numcores - 1)
+
+```
+
+# obtain studentized sampling distributions 
+
+```{r, eval = FALSE}
+
+# Check if the studentized distribution is pivotal - NORMAL POPULATION
+
+set.seed(23222)
+means <- c(0, 1, 2, 5)
+sds <- sqrt(c(1, 1, 4, 0.25))
+
+# ---------------------------
+n <- 10
+B <- 99
+boot_t_stats_10_99_norm <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, 
+                                 n = 10)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_10_99_norm)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rnorm(n, mean = means[i], sd = sds[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_10_99_norm[j, i] <- (meansamp - means[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 10
+B <- 999
+boot_t_stats_10_999_norm <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
+                                  n = 10)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_10_999_norm)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rnorm(n, mean = means[i], sd = sds[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_10_999_norm[j, i] <- (meansamp - means[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 40
+B <- 99
+boot_t_stats_40_99_norm <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, 
+                                 n = 40)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_40_99_norm)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rnorm(n, mean = means[i], sd = sds[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_40_99_norm[j, i] <- (meansamp - means[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 40
+B <- 999
+boot_t_stats_40_999_norm <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
+                                  n = 40)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_40_999_norm)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rnorm(n, mean = means[i], sd = sds[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_40_999_norm[j, i] <- (meansamp - means[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 100
+B <- 99
+boot_t_stats_100_99_norm <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, 
+                                  n = 100)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_100_99_norm)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rnorm(n, mean = means[i], sd = sds[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_100_99_norm[j, i] <- (meansamp - means[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 100
+B <- 999
+boot_t_stats_100_999_norm <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
+                                   n = 100)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_100_999_norm)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rnorm(n, mean = means[i], sd = sds[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_100_999_norm[j, i] <- (meansamp - means[i])/se_boot
+    
+  }
+  
+}
+
+# combine all data together
+boot_t_stats_data_all_norm <- rbind(boot_t_stats_10_99_norm, 
+                               boot_t_stats_10_999_norm,
+                               boot_t_stats_40_99_norm, 
+                               boot_t_stats_40_999_norm, 
+                               boot_t_stats_100_99_norm, 
+                               boot_t_stats_100_999_norm)
+
+boot_t_stats_data_all_long_norm <- gather(boot_t_stats_data_all_norm, key = "simnumber", value = "bootstat", 1:4)
+
+# plot it
+ggplot(boot_t_stats_data_all_long_norm) +
+  geom_histogram(aes(bootstat, fill = as.factor(B)), position = "dodge", alpha = 0.8) +
+  facet_grid(n ~ simnumber, labeller = as_labeller(c("10" = "N = 10", "40" = "N = 40", "100" = "N = 100", 
+                                                     "sim1" = "Normal(0,1)", "sim2" = "Normal(1,1)",
+                                                     "sim3" = "Normal(2,4)", "sim4" = "Normal(5, 0.25)"))) +
+  theme_bw() +
+  labs(y = "Frequency", x = "Studentized sample means") +
+  scale_fill_manual(values = c("grey5", "grey70")) + # dark grey for B = 99 and light gray for B = 999
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+```
+
+```{r, eval = FALSE}
+
+# Check if the studentized distribution is pivotal - EXPONENTIAL POPULATION
+
+set.seed(322)
+lambdas <- c(0.25, 0.5, 1.00, 1.50)
+
+# ---------------------------
+n <- 5
+B <- 99
+boot_t_stats_5_99 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, n = 5)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_5_99)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_5_99[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 5
+B <- 999
+boot_t_stats_5_999 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
+                                 n = 5)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_5_999)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_5_999[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 10
+B <- 99
+boot_t_stats_10_99 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, 
+                                 n = 10)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_10_99)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_10_99[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 10
+B <- 999
+boot_t_stats_10_999 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
+                                  n = 10)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_10_999)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_10_999[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 20
+B <- 99
+boot_t_stats_20_99 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, 
+                                 n = 20)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_20_99)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_20_99[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 20
+B <- 999
+boot_t_stats_20_999 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
+                                  n = 20)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_20_999)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_20_999[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# combine all data together
+boot_t_stats_data_all <- rbind(boot_t_stats_5_99, boot_t_stats_5_999, boot_t_stats_10_99, boot_t_stats_10_999, boot_t_stats_20_99, 
+                               boot_t_stats_20_999)
+
+boot_t_stats_data_all_long <- gather(boot_t_stats_data_all, key = "simnumber", value = "bootstat", 1:4)
+
+# plot it
+ggplot(boot_t_stats_data_all_long) +
+  geom_histogram(aes(bootstat, fill = as.factor(B)), position = "dodge", alpha = 0.8) +
+  facet_grid(n ~ simnumber, labeller = as_labeller(c("5" = "N = 5", "10" = "N = 10", "20" = "N = 20", 
+                                                     "sim1" = "Exponential(0.25)", "sim2" = "Exponential(0.5)",
+                                                     "sim3" = "Exponential(1)", "sim4" = "Exponential(1.5)"))) +
+  theme_bw() +
+  labs(y = "Frequency", x = "Studentized sample means") +
+  scale_fill_manual(values = c("grey5", "grey70")) + # dark grey for B = 99 and light gray for B = 999
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+```
+
+```{r, eval = FALSE}
+
+# Check if the studentized distribution is pivotal - BERNOULLI CASE
+
+set.seed(23332)
+ps <- c(0.1, 0.25, 0.5)
+
+# ---------------------------
+n <- 5
+B <- 99
+boot_t_stats_5_99_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), B = 99, n = 5)
+# ---------------------------
+
+for(i in 1:3){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_5_99_bern)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rbernoulli(n, p = ps[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_5_99_bern[j, i] <- (meansamp - ps[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 5
+B <- 999
+boot_t_stats_5_999_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), B = 999, n = 5)
+# ---------------------------
+
+for(i in 1:3){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_5_999_bern)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rbernoulli(n, p = ps[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_5_999_bern[j, i] <- (meansamp - ps[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 20
+B <- 99
+boot_t_stats_20_99_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), B = 99, n = 20)
+# ---------------------------
+
+for(i in 1:3){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_20_99_bern)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rbernoulli(n, p = ps[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_20_99_bern[j, i] <- (meansamp - ps[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 20
+B <- 999
+boot_t_stats_20_999_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), B = 999, 
+                                       n = 20)
+# ---------------------------
+
+for(i in 1:3){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_20_999_bern)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rbernoulli(n, p = ps[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_20_999_bern[j, i] <- (meansamp - ps[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 50
+B <- 99
+boot_t_stats_50_99_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), B = 99, n = 50)
+# ---------------------------
+
+for(i in 1:3){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_50_99_bern)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rbernoulli(n, p = ps[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_50_99_bern[j, i] <- (meansamp - ps[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 50
+B <- 999
+boot_t_stats_50_999_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), B = 999, 
+                                       n = 50)
+# ---------------------------
+
+for(i in 1:3){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_50_999_bern)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rbernoulli(n, p = ps[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_50_999_bern[j, i] <- (meansamp - ps[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 150
+B <- 99
+boot_t_stats_150_99_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), B = 99, 
+                                       n = 150)
+# ---------------------------
+
+for(i in 1:3){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_150_99_bern)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rbernoulli(n, p = ps[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_150_99_bern[j, i] <- (meansamp - ps[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 150
+B <- 999
+boot_t_stats_150_999_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), B = 999, 
+                                       n = 150)
+# ---------------------------
+
+for(i in 1:3){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_150_999_bern)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rbernoulli(n, p = ps[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_150_999_bern[j, i] <- (meansamp - ps[i])/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+
+# combine all data together
+boot_t_stats_data_all_bern <- rbind(boot_t_stats_5_99_bern, 
+                                    boot_t_stats_5_999_bern, 
+                                    boot_t_stats_20_99_bern, 
+                                    boot_t_stats_20_999_bern,
+                                    boot_t_stats_50_99_bern, 
+                                    boot_t_stats_50_999_bern, 
+                                    boot_t_stats_150_99_bern, 
+                                    boot_t_stats_150_999_bern)
+
+boot_t_stats_data_all_long_bern <- gather(boot_t_stats_data_all_bern, key = "simnumber", value = "bootstat", 1:3)
+
+# plot it
+ggplot(boot_t_stats_data_all_long_bern) +
+  geom_histogram(aes(bootstat, fill = as.factor(B)), position = "dodge", alpha = 0.8) +
+  facet_grid(n ~ simnumber, labeller = as_labeller(c("5" = "N = 5", "20" = "N = 20", "50" = "N = 50", "150" = "N = 150", 
+                                                     "sim1" = "Bernoulli(0.1)", "sim2" = "Bernoulli(0.25)",
+                                                     "sim3" = "Bernoulli(0.5)"))) +
+  theme_bw() +
+  labs(y = "Frequency", x = "Studentized sample proportions") +
+  scale_fill_manual(values = c("grey5", "grey70")) + # dark grey for B = 99 and light gray for B = 999
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+```
+
+# coverage proportions of z- and t-interval for the mean
+
+```{r}
+
+# NORMAL(1,1) POPULATION
+
+set.seed(35)
+
+#------------------------
+n <- 10
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+#------------------------
+
+# z-interval
+z_ints_norm_10 <- t(apply(sampmat, 2, function(x) mean(x) + ((1/sqrt(n))*qnorm(c(0.025, 0.975)))))
+
+# t-interval
+t_ints_norm_10 <- t(apply(sampmat, 2, function(x) mean(x) + ((sd(x)/sqrt(n))*qt(c(0.025, 0.975), df = n-1))))
+
+# check for containment
+mean(z_ints_norm_10[,1] <= 1 & z_ints_norm_10[,2] >= 1)
+mean(t_ints_norm_10[,1] <= 1 & t_ints_norm_10[,2] >= 1)
+
+#------------------------
+n <- 40
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+#------------------------
+
+# z-interval
+z_ints_norm_40 <- t(apply(sampmat, 2, function(x) mean(x) + ((1/sqrt(n))*qnorm(c(0.025, 0.975)))))
+
+# t-interval
+t_ints_norm_40 <- t(apply(sampmat, 2, function(x) mean(x) + ((sd(x)/sqrt(n))*qt(c(0.025, 0.975), df = n-1))))
+
+# check for containment
+mean(z_ints_norm_40[,1] <= 1 & z_ints_norm_40[,2] >= 1)
+mean(t_ints_norm_40[,1] <= 1 & t_ints_norm_40[,2] >= 1)
+
+#------------------------
+n <- 100
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+#------------------------
+
+# z-interval
+z_ints_norm_100 <- t(apply(sampmat, 2, function(x) mean(x) + ((1/sqrt(n))*qnorm(c(0.025, 0.975)))))
+
+# t-interval
+t_ints_norm_100 <- t(apply(sampmat, 2, function(x) mean(x) + ((sd(x)/sqrt(n))*qt(c(0.025, 0.975), df = n-1))))
+
+# check for containment
+mean(z_ints_norm_100[,1] <= 1 & z_ints_norm_100[,2] >= 1)
+mean(t_ints_norm_100[,1] <= 1 & t_ints_norm_100[,2] >= 1)
+
+```
+
+```{r}
+
+# EXPONENTIAL(1) POPULATION
+
+set.seed(87)
+
+#------------------------
+n <- 5
+sampmat <- matrix(rexp(nsim*n), ncol = nsim)
+#------------------------
+
+# z-interval
+z_ints_exp_5 <- t(apply(sampmat, 2, function(x) mean(x) + ((1/sqrt(n))*qnorm(c(0.025, 0.975)))))
+
+# t-interval
+t_ints_exp_5 <- t(apply(sampmat, 2, function(x) mean(x) + ((sd(x)/sqrt(n))*qt(c(0.025, 0.975), df = n-1))))
+
+# check for containment
+mean(z_ints_exp_5[,1] <= 1 & z_ints_exp_5[,2] >= 1)
+mean(t_ints_exp_5[,1] <= 1 & t_ints_exp_5[,2] >= 1)
+
+#------------------------
+n <- 10
+sampmat <- matrix(rexp(nsim*n), ncol = nsim)
+#------------------------
+
+# z-interval
+z_ints_exp_10 <- t(apply(sampmat, 2, function(x) mean(x) + ((1/sqrt(n))*qnorm(c(0.025, 0.975)))))
+
+# t-interval
+t_ints_exp_10 <- t(apply(sampmat, 2, function(x) mean(x) + ((sd(x)/sqrt(n))*qt(c(0.025, 0.975), df = n-1))))
+
+# check for containment
+mean(z_ints_exp_10[,1] <= 1 & z_ints_exp_10[,2] >= 1)
+mean(t_ints_exp_10[,1] <= 1 & t_ints_exp_10[,2] >= 1)
+
+#------------------------
+n <- 20
+sampmat <- matrix(rexp(nsim*n), ncol = nsim)
+#------------------------
+
+# z-interval
+z_ints_exp_20 <- t(apply(sampmat, 2, function(x) mean(x) + ((1/sqrt(n))*qnorm(c(0.025, 0.975)))))
+
+# t-interval
+t_ints_exp_20 <- t(apply(sampmat, 2, function(x) mean(x) + ((sd(x)/sqrt(n))*qt(c(0.025, 0.975), df = n-1))))
+
+# check for containment
+mean(z_ints_exp_20[,1] <= 1 & z_ints_exp_20[,2] >= 1)
+mean(t_ints_exp_20[,1] <= 1 & t_ints_exp_20[,2] >= 1)
+
+```
+
+# coverage proportions of bootstrap intervals for the mean
+
+```{r}
+
+# NORMAL(1,1) POPULATION
+
+set.seed(575)
+
+#------------------------
+n <- 10
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_norm_10_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_norm_10_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_norm_10_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_norm_10_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_norm_10_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_norm_10_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_norm_10_99[,1] <= 1 & perc_ints_norm_10_99[,2] >= 1)
+mean(perc_ints_norm_10_999[,1] <= 1 & perc_ints_norm_10_999[,2] >= 1)
+
+mean(basic_ints_norm_10_99[,1] <= 1 & basic_ints_norm_10_99[,2] >= 1)
+mean(basic_ints_norm_10_999[,1] <= 1 & basic_ints_norm_10_999[,2] >= 1)
+
+mean(student_ints_norm_10_99[,1] <= 1 & student_ints_norm_10_99[,2] >= 1, na.rm = TRUE)
+sum(is.na(student_ints_norm_10_99[,1]) | is.na(student_ints_norm_10_99[,2]))
+sum(abs(student_ints_norm_10_99[,1]) == Inf | abs(student_ints_norm_10_99[,2]) == Inf)
+
+mean(student_ints_norm_10_999[,1] <= 1 & student_ints_norm_10_999[,2] >= 1, na.rm = TRUE)
+sum(is.na(student_ints_norm_10_999[,1]) | is.na(student_ints_norm_10_999[,2]))
+sum(abs(student_ints_norm_10_999[,1]) == Inf | abs(student_ints_norm_10_999[,2]) == Inf)
+
+#------------------------
+n <- 40
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_norm_40_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_norm_40_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_norm_40_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_norm_40_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_norm_40_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_norm_40_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_norm_40_99[,1] <= 1 & perc_ints_norm_40_99[,2] >= 1)
+mean(perc_ints_norm_40_999[,1] <= 1 & perc_ints_norm_40_999[,2] >= 1)
+
+mean(basic_ints_norm_40_99[,1] <= 1 & basic_ints_norm_40_99[,2] >= 1)
+mean(basic_ints_norm_40_999[,1] <= 1 & basic_ints_norm_40_999[,2] >= 1)
+
+mean(student_ints_norm_40_99[,1] <= 1 & student_ints_norm_40_99[,2] >= 1, na.rm = TRUE)
+sum(is.na(student_ints_norm_40_99[,1]) | is.na(student_ints_norm_40_99[,2]))
+mean(student_ints_norm_40_999[,1] <= 1 & student_ints_norm_40_999[,2] >= 1, na.rm = TRUE)
+sum(is.na(student_ints_norm_40_999[,1]) | is.na(student_ints_norm_40_999[,2]))
+
+#------------------------
+n <- 100
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_norm_100_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_norm_100_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_norm_100_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_norm_100_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_norm_100_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_norm_100_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_norm_100_99[,1] <= 1 & perc_ints_norm_100_99[,2] >= 1)
+mean(perc_ints_norm_100_999[,1] <= 1 & perc_ints_norm_100_999[,2] >= 1)
+
+mean(basic_ints_norm_100_99[,1] <= 1 & basic_ints_norm_100_99[,2] >= 1)
+mean(basic_ints_norm_100_999[,1] <= 1 & basic_ints_norm_100_999[,2] >= 1)
+
+mean(student_ints_norm_100_99[,1] <= 1 & student_ints_norm_100_99[,2] >= 1, na.rm = TRUE)
+sum(is.na(student_ints_norm_100_99[,1]) | is.na(student_ints_norm_100_99[,2]))
+mean(student_ints_norm_100_999[,1] <= 1 & student_ints_norm_100_999[,2] >= 1, na.rm = TRUE)
+sum(is.na(student_ints_norm_100_999[,1]) | is.na(student_ints_norm_100_999[,2]))
+
+```
+
+```{r}
+
+# EXPONENTIAL(1) POPULATION
+
+set.seed(143)
+
+#------------------------
+n <- 5
+sampmat <- matrix(rexp(nsim*n), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_exp_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_exp_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_exp_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_exp_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar%
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_exp_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_exp_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_exp_5_99[,1] <= 1 & perc_ints_exp_5_99[,2] >= 1)
+mean(perc_ints_exp_5_999[,1] <= 1 & perc_ints_exp_5_999[,2] >= 1)
+
+mean(basic_ints_exp_5_99[,1] <= 1 & basic_ints_exp_5_99[,2] >= 1)
+mean(basic_ints_exp_5_999[,1] <= 1 & basic_ints_exp_5_999[,2] >= 1)
+
+## for studentized interval remove NA's and infinite valued intervals before checking - note how many there are
+sum(is.na(student_ints_exp_5_99[,1]) | is.na(student_ints_exp_5_99[,2]))
+sum(abs(student_ints_exp_5_99[,1]) == Inf | abs(student_ints_exp_5_99[,2]) == Inf)
+
+(sum(student_ints_exp_5_99[,1] > -Inf & student_ints_exp_5_99[,1] <= 1 & student_ints_exp_5_99[,2] < Inf & student_ints_exp_5_99[,2] >= 1 & !is.na(student_ints_exp_5_99[,1]) & !is.na(student_ints_exp_5_99[,2])) / sum(student_ints_exp_5_99[,1] > -Inf & student_ints_exp_5_99[,2] < Inf & !is.na(student_ints_exp_5_99[,1]) & !is.na(student_ints_exp_5_99[,2])))
+
+sum(is.na(student_ints_exp_5_999[,1]) | is.na(student_ints_exp_5_999[,2]))
+sum(abs(student_ints_exp_5_999[,1]) == Inf | abs(student_ints_exp_5_999[,2]) == Inf)
+
+(sum(student_ints_exp_5_999[,1] > -Inf & student_ints_exp_5_999[,1] <= 1 & student_ints_exp_5_999[,2] < Inf & student_ints_exp_5_999[,2] >= 1 & !is.na(student_ints_exp_5_999[,1]) & !is.na(student_ints_exp_5_999[,2])) / sum(student_ints_exp_5_999[,1] > -Inf & student_ints_exp_5_999[,2] < Inf & !is.na(student_ints_exp_5_999[,1]) & !is.na(student_ints_exp_5_999[,2])))
+
+
+#------------------------
+n <- 10
+sampmat <- matrix(rexp(nsim*n), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_exp_10_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_exp_10_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_exp_10_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_exp_10_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_exp_10_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_exp_10_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_exp_10_99[,1] <= 1 & perc_ints_exp_10_99[,2] >= 1)
+mean(perc_ints_exp_10_999[,1] <= 1 & perc_ints_exp_10_999[,2] >= 1)
+
+mean(basic_ints_exp_10_99[,1] <= 1 & basic_ints_exp_10_99[,2] >= 1)
+mean(basic_ints_exp_10_999[,1] <= 1 & basic_ints_exp_10_999[,2] >= 1)
+
+## for studentized interval remove NA's and infinite valued intervals before checking - note how many there are
+mean(student_ints_exp_10_99[,1] <= 1 & student_ints_exp_10_99[,2] >= 1, na.rm = TRUE)
+sum(is.na(student_ints_exp_10_99[,1]) | is.na(student_ints_exp_10_99[,2])) 
+
+(sum(student_ints_exp_10_99[,1] > -Inf & student_ints_exp_10_99[,1] <= 1 & student_ints_exp_10_99[,2] < Inf & student_ints_exp_10_99[,2] >= 1 & !is.na(student_ints_exp_10_99[,1]) & !is.na(student_ints_exp_10_99[,2])) / sum(student_ints_exp_10_99[,1] > -Inf & student_ints_exp_10_99[,2] < Inf & !is.na(student_ints_exp_10_99[,1]) & !is.na(student_ints_exp_10_99[,2])))
+
+mean(student_ints_exp_10_999[,1] <= 1 & student_ints_exp_10_999[,2] >= 1, na.rm = TRUE)
+sum(is.na(student_ints_exp_10_999[,1]) | is.na(student_ints_exp_10_999[,2]))
+
+(sum(student_ints_exp_10_999[,1] > -Inf & student_ints_exp_10_999[,1] <= 1 & student_ints_exp_10_999[,2] < Inf & student_ints_exp_10_999[,2] >= 1 & !is.na(student_ints_exp_10_999[,1]) & !is.na(student_ints_exp_10_999[,2])) / sum(student_ints_exp_10_999[,1] > -Inf & student_ints_exp_10_999[,2] < Inf & !is.na(student_ints_exp_10_999[,1]) & !is.na(student_ints_exp_10_999[,2])))
+
+#------------------------
+n <- 20
+sampmat <- matrix(rexp(nsim*n), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_exp_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_exp_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_exp_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_exp_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_exp_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_exp_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_exp_20_99[,1] <= 1 & perc_ints_exp_20_99[,2] >= 1)
+mean(perc_ints_exp_20_999[,1] <= 1 & perc_ints_exp_20_999[,2] >= 1)
+
+mean(basic_ints_exp_20_99[,1] <= 1 & basic_ints_exp_20_99[,2] >= 1)
+mean(basic_ints_exp_20_999[,1] <= 1 & basic_ints_exp_20_999[,2] >= 1)
+
+## for studentized interval remove NA's and infinite valued intervals before checking - note how many there are
+mean(student_ints_exp_20_99[,1] <= 1 & student_ints_exp_20_99[,2] >= 1, na.rm = TRUE)
+sum(is.na(student_ints_exp_20_99[,1]) | is.na(student_ints_exp_20_99[,2]))
+
+(sum(student_ints_exp_20_99[,1] > -Inf & student_ints_exp_20_99[,1] <= 1 & student_ints_exp_20_99[,2] < Inf & student_ints_exp_20_99[,2] >= 1 & !is.na(student_ints_exp_20_99[,1]) & !is.na(student_ints_exp_20_99[,2])) / sum(student_ints_exp_20_99[,1] > -Inf & student_ints_exp_20_99[,2] < Inf & !is.na(student_ints_exp_20_99[,1]) & !is.na(student_ints_exp_20_99[,2])))
+
+mean(student_ints_exp_20_999[,1] <= 1 & student_ints_exp_20_999[,2] >= 1, na.rm = TRUE)
+sum(is.na(student_ints_exp_20_999[,1]) | is.na(student_ints_exp_20_999[,2]))
+
+(sum(student_ints_exp_20_999[,1] > -Inf & student_ints_exp_20_999[,1] <= 1 & student_ints_exp_20_999[,2] < Inf & student_ints_exp_20_999[,2] >= 1 & !is.na(student_ints_exp_20_999[,1]) & !is.na(student_ints_exp_20_999[,2])) / sum(student_ints_exp_20_999[,1] > -Inf & student_ints_exp_20_999[,2] < Inf & !is.na(student_ints_exp_20_999[,1]) & !is.na(student_ints_exp_20_999[,2])))
+
+```
+
+# compare widths of t-intervals and studentized intervals for the mean when Exponential(1) is underlying population
+
+```{r}
+
+# place all intervals of interest in one dataset
+allints_dat <- as.data.frame(rbind(z_ints_exp_5, t_ints_exp_5,
+                     z_ints_exp_10, t_ints_exp_10,
+                     z_ints_exp_20, t_ints_exp_20,
+                     student_ints_exp_5_99, student_ints_exp_5_999,
+                     student_ints_exp_10_99, student_ints_exp_10_999,
+                     student_ints_exp_20_99, student_ints_exp_20_999))
+
+# calculate widths
+allints_dat$width <- round(allints_dat$V2 - allints_dat$V1, 10)
+
+# tack on the simulation characterstics
+allints_dat$samplesize <- rep(rep(c(5, 5, 10, 10, 20, 20), rep(10000, 6)), 2)
+allints_dat$intervaltype <- c(rep(rep(c("z", "t"), c(10000, 10000)), 3), rep(rep(c("student99", "student999"), c(10000, 10000)), 3))
+allints_dat$intervaltype <- as.factor(allints_dat$intervaltype)
+
+# plot interval widths
+ggplot(filter(allints_dat, intervaltype != "z")) +
+  geom_boxplot(aes(log(width), intervaltype)) +
+  facet_wrap(~samplesize, labeller = as_labeller(c("5" = "N = 5", "10" = "N = 10", "20" = "N = 20"))) +
+  coord_flip() +
+  theme_bw() +
+  labs(y = "", x = "Log(interval width)") +
+  scale_y_discrete(labels = c("Studentized \n(B = 99)", "Studentized \n(B = 999)", "t-interval")) +
+  geom_vline(data = filter(allints_dat, intervaltype == "z"), mapping = aes(xintercept = log(width)), linetype = "dashed") +
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+```
+
+# coverage proportions of z-interval for the proportion (also check for bad behavior)
+
+```{r}
+
+set.seed(667)
+
+#------------------------
+n <- 5
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.5), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point5_5 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point5_5[,1] <= 0.5 & approx_z_ints_point5_5[,2] >= 0.5)
+mean(approx_z_ints_point5_5[,1] == approx_z_ints_point5_5[,2])
+mean(approx_z_ints_point5_5[,1] < 0 | approx_z_ints_point5_5[,2] > 1)
+
+#------------------------
+n <- 20
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.5), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point5_20 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point5_20[,1] <= 0.5 & approx_z_ints_point5_20[,2] >= 0.5)
+mean(approx_z_ints_point5_20[,1] == approx_z_ints_point5_20[,2])
+mean(approx_z_ints_point5_20[,1] < 0 | approx_z_ints_point5_20[,2] > 1)
+
+#------------------------
+n <- 50
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.5), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point5_50 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point5_50[,1] <= 0.5 & approx_z_ints_point5_50[,2] >= 0.5)
+mean(approx_z_ints_point5_50[,1] == approx_z_ints_point5_50[,2])
+mean(approx_z_ints_point5_50[,1] < 0 | approx_z_ints_point5_50[,2] > 1)
+
+#------------------------
+n <- 150
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.5), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point5_150 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point5_150[,1] <= 0.5 & approx_z_ints_point5_150[,2] >= 0.5)
+mean(approx_z_ints_point5_150[,1] == approx_z_ints_point5_150[,2])
+mean(approx_z_ints_point5_150[,1] < 0 | approx_z_ints_point5_150[,2] > 1)
+
+```
+
+```{r}
+
+set.seed(721)
+
+#------------------------
+n <- 5
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.25), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point25_5 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point25_5[,1] <= 0.25 & approx_z_ints_point25_5[,2] >= 0.25)
+mean(approx_z_ints_point25_5[,1] == approx_z_ints_point25_5[,2])
+mean(approx_z_ints_point25_5[,1] < 0 | approx_z_ints_point25_5[,2] > 1)
+
+#------------------------
+n <- 20
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.25), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point25_20 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point25_20[,1] <= 0.25 & approx_z_ints_point25_20[,2] >= 0.25)
+mean(approx_z_ints_point25_20[,1] == approx_z_ints_point25_20[,2])
+mean(approx_z_ints_point25_20[,1] < 0 | approx_z_ints_point25_20[,2] > 1)
+
+#------------------------
+n <- 50
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.25), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point25_50 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point25_50[,1] <= 0.25 & approx_z_ints_point25_50[,2] >= 0.25)
+mean(approx_z_ints_point25_50[,1] == approx_z_ints_point25_50[,2])
+mean(approx_z_ints_point25_50[,1] < 0 | approx_z_ints_point25_50[,2] > 1)
+
+#------------------------
+n <- 150
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.25), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point25_150 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point25_150[,1] <= 0.25 & approx_z_ints_point25_150[,2] >= 0.25)
+mean(approx_z_ints_point25_150[,1] == approx_z_ints_point25_150[,2])
+mean(approx_z_ints_point25_150[,1] < 0 | approx_z_ints_point25_150[,2] > 1)
+
+```
+
+```{r}
+
+set.seed(775)
+
+#------------------------
+n <- 5
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.1), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point1_5 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point1_5[,1] <= 0.1 & approx_z_ints_point1_5[,2] >= 0.1)
+mean(approx_z_ints_point1_5[,1] == approx_z_ints_point1_5[,2])
+mean(approx_z_ints_point1_5[,1] < 0 | approx_z_ints_point1_5[,2] > 1)
+
+#------------------------
+n <- 20
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.1), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point1_20 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point1_20[,1] <= 0.1 & approx_z_ints_point1_20[,2] >= 0.1)
+mean(approx_z_ints_point1_20[,1] == approx_z_ints_point1_20[,2])
+mean(approx_z_ints_point1_20[,1] < 0 | approx_z_ints_point1_20[,2] > 1)
+
+#------------------------
+n <- 50
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.1), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point1_50 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point1_50[,1] <= 0.1 & approx_z_ints_point1_50[,2] >= 0.1)
+mean(approx_z_ints_point1_50[,1] == approx_z_ints_point1_50[,2])
+mean(approx_z_ints_point1_50[,1] < 0 | approx_z_ints_point1_50[,2] > 1)
+
+#------------------------
+n <- 150
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.1), ncol = nsim)
+#------------------------
+# z-interval for proportions
+approx_z_ints_point1_150 <- t(apply(sampmat, 2, function(x) mean(x) + (qnorm(c(0.025,
+                                                                               0.975))*sqrt((mean(x)*(1-mean(x)))/n))))
+
+# coverage proportion
+mean(approx_z_ints_point1_150[,1] <= 0.1 & approx_z_ints_point1_150[,2] >= 0.1)
+mean(approx_z_ints_point1_150[,1] == approx_z_ints_point1_150[,2])
+mean(approx_z_ints_point1_150[,1] < 0 | approx_z_ints_point1_150[,2] > 1)
+
+```
+
+# coverage proportions of bootstrap intervals for the proportion (also check for bad behavior)
+
+```{r}
+
+set.seed(827)
+
+#------------------------
+n <- 5
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.5), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point5_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point5_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point5_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point5_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point5_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point5_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point5_5_99[,1] <= 0.5 & perc_ints_point5_5_99[,2] >= 0.5)
+mean(perc_ints_point5_5_999[,1] <= 0.5 & perc_ints_point5_5_999[,2] >= 0.5)
+
+mean(basic_ints_point5_5_99[,1] <= 0.5 & basic_ints_point5_5_99[,2] >= 0.5)
+mean(basic_ints_point5_5_999[,1] <= 0.5 & basic_ints_point5_5_999[,2] >= 0.5)
+
+sum(is.na(student_ints_point5_5_99[,1]) | is.na(student_ints_point5_5_99[,2]))
+sum(abs(student_ints_point5_5_99[,1]) == Inf | abs(student_ints_point5_5_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point5_5_99[,1] > -Inf & student_ints_point5_5_99[,1] <= 0.5 & student_ints_point5_5_99[,2] < Inf & student_ints_point5_5_99[,2] >= 0.5 & !is.na(student_ints_point5_5_99[,1]) & !is.na(student_ints_point5_5_99[,2])) / sum(student_ints_point5_5_99[,1] > -Inf & student_ints_point5_5_99[,2] < Inf & !is.na(student_ints_point5_5_99[,1]) & !is.na(student_ints_point5_5_99[,2])))
+
+sum(is.na(student_ints_point5_5_999[,1]) | is.na(student_ints_point5_5_999[,2]))
+sum(abs(student_ints_point5_5_999[,1]) == Inf | abs(student_ints_point5_5_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point5_5_999[,1] > -Inf & student_ints_point5_5_999[,1] <= 0.5 & student_ints_point5_5_999[,2] < Inf & student_ints_point5_5_999[,2] >= 0.5 & !is.na(student_ints_point5_5_999[,1]) & !is.na(student_ints_point5_5_999[,2])) / sum(student_ints_point5_5_999[,1] > -Inf & student_ints_point5_5_999[,2] < Inf & !is.na(student_ints_point5_5_999[,1]) & !is.na(student_ints_point5_5_999[,2])))
+
+
+#------------------------
+n <- 20
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.5), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point5_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point5_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point5_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point5_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point5_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point5_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point5_20_99[,1] <= 0.5 & perc_ints_point5_20_99[,2] >= 0.5)
+mean(perc_ints_point5_20_999[,1] <= 0.5 & perc_ints_point5_20_999[,2] >= 0.5)
+
+mean(basic_ints_point5_20_99[,1] <= 0.5 & basic_ints_point5_20_99[,2] >= 0.5)
+mean(basic_ints_point5_20_999[,1] <= 0.5 & basic_ints_point5_20_999[,2] >= 0.5)
+
+sum(is.na(student_ints_point5_20_99[,1]) | is.na(student_ints_point5_20_99[,2]))
+sum(abs(student_ints_point5_20_99[,1]) == Inf | abs(student_ints_point5_20_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point5_20_99[,1] > -Inf & student_ints_point5_20_99[,1] <= 0.5 & student_ints_point5_20_99[,2] < Inf & student_ints_point5_20_99[,2] >= 0.5 & !is.na(student_ints_point5_20_99[,1]) & !is.na(student_ints_point5_20_99[,2])) / sum(student_ints_point5_20_99[,1] > -Inf & student_ints_point5_20_99[,2] < Inf & !is.na(student_ints_point5_20_99[,1]) & !is.na(student_ints_point5_20_99[,2])))
+
+sum(is.na(student_ints_point5_20_999[,1]) | is.na(student_ints_point5_20_999[,2]))
+sum(abs(student_ints_point5_20_999[,1]) == Inf | abs(student_ints_point5_20_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point5_20_999[,1] > -Inf & student_ints_point5_20_999[,1] <= 0.5 & student_ints_point5_20_999[,2] < Inf & student_ints_point5_20_999[,2] >= 0.5 & !is.na(student_ints_point5_20_999[,1]) & !is.na(student_ints_point5_20_999[,2])) / sum(student_ints_point5_20_999[,1] > -Inf & student_ints_point5_20_999[,2] < Inf & !is.na(student_ints_point5_20_999[,1]) & !is.na(student_ints_point5_20_999[,2])))
+
+#------------------------
+n <- 50
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.5), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point5_50_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point5_50_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point5_50_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point5_50_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point5_50_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point5_50_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point5_50_99[,1] <= 0.5 & perc_ints_point5_50_99[,2] >= 0.5)
+mean(perc_ints_point5_50_999[,1] <= 0.5 & perc_ints_point5_50_999[,2] >= 0.5)
+
+mean(basic_ints_point5_50_99[,1] <= 0.5 & basic_ints_point5_50_99[,2] >= 0.5)
+mean(basic_ints_point5_50_999[,1] <= 0.5 & basic_ints_point5_50_999[,2] >= 0.5)
+
+sum(is.na(student_ints_point5_50_99[,1]) | is.na(student_ints_point5_50_99[,2]))
+sum(abs(student_ints_point5_50_99[,1]) == Inf | abs(student_ints_point5_50_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point5_50_99[,1] > -Inf & student_ints_point5_50_99[,1] <= 0.5 & student_ints_point5_50_99[,2] < Inf & student_ints_point5_50_99[,2] >= 0.5 & !is.na(student_ints_point5_50_99[,1]) & !is.na(student_ints_point5_50_99[,2])) / sum(student_ints_point5_50_99[,1] > -Inf & student_ints_point5_50_99[,2] < Inf & !is.na(student_ints_point5_50_99[,1]) & !is.na(student_ints_point5_50_99[,2])))
+
+sum(is.na(student_ints_point5_50_999[,1]) | is.na(student_ints_point5_50_999[,2]))
+sum(abs(student_ints_point5_50_999[,1]) == Inf | abs(student_ints_point5_50_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point5_50_999[,1] > -Inf & student_ints_point5_50_999[,1] <= 0.5 & student_ints_point5_50_999[,2] < Inf & student_ints_point5_50_999[,2] >= 0.5 & !is.na(student_ints_point5_50_999[,1]) & !is.na(student_ints_point5_50_999[,2])) / sum(student_ints_point5_50_999[,1] > -Inf & student_ints_point5_50_999[,2] < Inf & !is.na(student_ints_point5_50_999[,1]) & !is.na(student_ints_point5_50_999[,2])))
+
+#------------------------
+n <- 150
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.5), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point5_150_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point5_150_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point5_150_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point5_150_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point5_150_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point5_150_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point5_150_99[,1] <= 0.5 & perc_ints_point5_150_99[,2] >= 0.5)
+mean(perc_ints_point5_150_999[,1] <= 0.5 & perc_ints_point5_150_999[,2] >= 0.5)
+
+mean(basic_ints_point5_150_99[,1] <= 0.5 & basic_ints_point5_150_99[,2] >= 0.5)
+mean(basic_ints_point5_150_999[,1] <= 0.5 & basic_ints_point5_150_999[,2] >= 0.5)
+
+sum(is.na(student_ints_point5_150_99[,1]) | is.na(student_ints_point5_150_99[,2]))
+sum(abs(student_ints_point5_150_99[,1]) == Inf | abs(student_ints_point5_150_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point5_150_99[,1] > -Inf & student_ints_point5_150_99[,1] <= 0.5 & student_ints_point5_150_99[,2] < Inf & student_ints_point5_150_99[,2] >= 0.5 & !is.na(student_ints_point5_150_99[,1]) & !is.na(student_ints_point5_150_99[,2])) / sum(student_ints_point5_150_99[,1] > -Inf & student_ints_point5_150_99[,2] < Inf & !is.na(student_ints_point5_150_99[,1]) & !is.na(student_ints_point5_150_99[,2])))
+
+sum(is.na(student_ints_point5_150_999[,1]) | is.na(student_ints_point5_150_999[,2]))
+sum(abs(student_ints_point5_150_999[,1]) == Inf | abs(student_ints_point5_150_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point5_150_999[,1] > -Inf & student_ints_point5_150_999[,1] <= 0.5 & student_ints_point5_150_999[,2] < Inf & student_ints_point5_150_999[,2] >= 0.5 & !is.na(student_ints_point5_150_999[,1]) & !is.na(student_ints_point5_150_999[,2])) / sum(student_ints_point5_150_999[,1] > -Inf & student_ints_point5_150_999[,2] < Inf & !is.na(student_ints_point5_150_999[,1]) & !is.na(student_ints_point5_150_999[,2])))
+
+
+```
+
+```{r}
+
+set.seed(941)
+
+#------------------------
+n <- 5
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.25), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point25_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point25_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point25_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point25_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point25_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point25_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point25_5_99[,1] <= 0.25 & perc_ints_point25_5_99[,2] >= 0.25)
+mean(perc_ints_point25_5_999[,1] <= 0.25 & perc_ints_point25_5_999[,2] >= 0.25)
+
+mean(basic_ints_point25_5_99[,1] <= 0.25 & basic_ints_point25_5_99[,2] >= 0.25)
+mean(basic_ints_point25_5_999[,1] <= 0.25 & basic_ints_point25_5_999[,2] >= 0.25)
+
+sum(is.na(student_ints_point25_5_99[,1]) | is.na(student_ints_point25_5_99[,2]))
+sum(abs(student_ints_point25_5_99[,1]) == Inf | abs(student_ints_point25_5_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point25_5_99[,1] > -Inf & student_ints_point25_5_99[,1] <= 0.25 & student_ints_point25_5_99[,2] < Inf & student_ints_point25_5_99[,2] >= 0.25 & !is.na(student_ints_point25_5_99[,1]) & !is.na(student_ints_point25_5_99[,2])) / sum(student_ints_point25_5_99[,1] > -Inf & student_ints_point25_5_99[,2] < Inf & !is.na(student_ints_point25_5_99[,1]) & !is.na(student_ints_point25_5_99[,2])))
+
+sum(is.na(student_ints_point25_5_999[,1]) | is.na(student_ints_point25_5_999[,2]))
+sum(abs(student_ints_point25_5_999[,1]) == Inf | abs(student_ints_point25_5_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point25_5_999[,1] > -Inf & student_ints_point25_5_999[,1] <= 0.25 & student_ints_point25_5_999[,2] < Inf & student_ints_point25_5_999[,2] >= 0.25 & !is.na(student_ints_point25_5_999[,1]) & !is.na(student_ints_point25_5_999[,2])) / sum(student_ints_point25_5_999[,1] > -Inf & student_ints_point25_5_999[,2] < Inf & !is.na(student_ints_point25_5_999[,1]) & !is.na(student_ints_point25_5_999[,2])))
+
+#------------------------
+n <- 20
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.25), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point25_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point25_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point25_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point25_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point25_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point25_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point25_20_99[,1] <= 0.25 & perc_ints_point25_20_99[,2] >= 0.25)
+mean(perc_ints_point25_20_999[,1] <= 0.25 & perc_ints_point25_20_999[,2] >= 0.25)
+
+mean(basic_ints_point25_20_99[,1] <= 0.25 & basic_ints_point25_20_99[,2] >= 0.25)
+mean(basic_ints_point25_20_999[,1] <= 0.25 & basic_ints_point25_20_999[,2] >= 0.25)
+
+sum(is.na(student_ints_point25_20_99[,1]) | is.na(student_ints_point25_20_99[,2]))
+sum(abs(student_ints_point25_20_99[,1]) == Inf | abs(student_ints_point25_20_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point25_20_99[,1] > -Inf & student_ints_point25_20_99[,1] <= 0.25 & student_ints_point25_20_99[,2] < Inf & student_ints_point25_20_99[,2] >= 0.25 & !is.na(student_ints_point25_20_99[,1]) & !is.na(student_ints_point25_20_99[,2])) / sum(student_ints_point25_20_99[,1] > -Inf & student_ints_point25_20_99[,2] < Inf & !is.na(student_ints_point25_20_99[,1]) & !is.na(student_ints_point25_20_99[,2])))
+
+sum(is.na(student_ints_point25_20_999[,1]) | is.na(student_ints_point25_20_999[,2]))
+sum(abs(student_ints_point25_20_999[,1]) == Inf | abs(student_ints_point25_20_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point25_20_999[,1] > -Inf & student_ints_point25_20_999[,1] <= 0.25 & student_ints_point25_20_999[,2] < Inf & student_ints_point25_20_999[,2] >= 0.25 & !is.na(student_ints_point25_20_999[,1]) & !is.na(student_ints_point25_20_999[,2])) / sum(student_ints_point25_20_999[,1] > -Inf & student_ints_point25_20_999[,2] < Inf & !is.na(student_ints_point25_20_999[,1]) & !is.na(student_ints_point25_20_999[,2])))
+
+#------------------------
+n <- 50
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.25), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point25_50_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point25_50_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point25_50_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point25_50_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point25_50_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point25_50_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point25_50_99[,1] <= 0.25 & perc_ints_point25_50_99[,2] >= 0.25)
+mean(perc_ints_point25_50_999[,1] <= 0.25 & perc_ints_point25_50_999[,2] >= 0.25)
+
+mean(basic_ints_point25_50_99[,1] <= 0.25 & basic_ints_point25_50_99[,2] >= 0.25)
+mean(basic_ints_point25_50_999[,1] <= 0.25 & basic_ints_point25_50_999[,2] >= 0.25)
+
+sum(is.na(student_ints_point25_50_99[,1]) | is.na(student_ints_point25_50_99[,2]))
+sum(abs(student_ints_point25_50_99[,1]) == Inf | abs(student_ints_point25_50_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point25_50_99[,1] > -Inf & student_ints_point25_50_99[,1] <= 0.25 & student_ints_point25_50_99[,2] < Inf & student_ints_point25_50_99[,2] >= 0.25 & !is.na(student_ints_point25_50_99[,1]) & !is.na(student_ints_point25_50_99[,2])) / sum(student_ints_point25_50_99[,1] > -Inf & student_ints_point25_50_99[,2] < Inf & !is.na(student_ints_point25_50_99[,1]) & !is.na(student_ints_point25_50_99[,2])))
+
+sum(is.na(student_ints_point25_50_999[,1]) | is.na(student_ints_point25_50_999[,2]))
+sum(abs(student_ints_point25_50_999[,1]) == Inf | abs(student_ints_point25_50_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point25_50_999[,1] > -Inf & student_ints_point25_50_999[,1] <= 0.25 & student_ints_point25_50_999[,2] < Inf & student_ints_point25_50_999[,2] >= 0.25 & !is.na(student_ints_point25_50_999[,1]) & !is.na(student_ints_point25_50_999[,2])) / sum(student_ints_point25_50_999[,1] > -Inf & student_ints_point25_50_999[,2] < Inf & !is.na(student_ints_point25_50_999[,1]) & !is.na(student_ints_point25_50_999[,2])))
+
+#------------------------
+n <- 150
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.25), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point25_150_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point25_150_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point25_150_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point25_150_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point25_150_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point25_150_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point25_150_99[,1] <= 0.25 & perc_ints_point25_150_99[,2] >= 0.25)
+mean(perc_ints_point25_150_999[,1] <= 0.25 & perc_ints_point25_150_999[,2] >= 0.25)
+
+mean(basic_ints_point25_150_99[,1] <= 0.25 & basic_ints_point25_150_99[,2] >= 0.25)
+mean(basic_ints_point25_150_999[,1] <= 0.25 & basic_ints_point25_150_999[,2] >= 0.25)
+
+sum(is.na(student_ints_point25_150_99[,1]) | is.na(student_ints_point25_150_99[,2]))
+sum(abs(student_ints_point25_150_99[,1]) == Inf | abs(student_ints_point25_150_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point25_150_99[,1] > -Inf & student_ints_point25_150_99[,1] <= 0.25 & student_ints_point25_150_99[,2] < Inf & student_ints_point25_150_99[,2] >= 0.25 & !is.na(student_ints_point25_150_99[,1]) & !is.na(student_ints_point25_150_99[,2])) / sum(student_ints_point25_150_99[,1] > -Inf & student_ints_point25_150_99[,2] < Inf & !is.na(student_ints_point25_150_99[,1]) & !is.na(student_ints_point25_150_99[,2])))
+
+sum(is.na(student_ints_point25_150_999[,1]) | is.na(student_ints_point25_150_999[,2]))
+sum(abs(student_ints_point25_150_999[,1]) == Inf | abs(student_ints_point25_150_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point25_150_999[,1] > -Inf & student_ints_point25_150_999[,1] <= 0.25 & student_ints_point25_150_999[,2] < Inf & student_ints_point25_150_999[,2] >= 0.25 & !is.na(student_ints_point25_150_999[,1]) & !is.na(student_ints_point25_150_999[,2])) / sum(student_ints_point25_150_999[,1] > -Inf & student_ints_point25_150_999[,2] < Inf & !is.na(student_ints_point25_150_999[,1]) & !is.na(student_ints_point25_150_999[,2])))
+
+```
+
+```{r}
+
+set.seed(1055)
+
+#------------------------
+n <- 5
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.1), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point1_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point1_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point1_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point1_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point1_5_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point1_5_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point1_5_99[,1] <= 0.1 & perc_ints_point1_5_99[,2] >= 0.1)
+mean(perc_ints_point1_5_999[,1] <= 0.1 & perc_ints_point1_5_999[,2] >= 0.1)
+
+mean(basic_ints_point1_5_99[,1] <= 0.1 & basic_ints_point1_5_99[,2] >= 0.1)
+mean(basic_ints_point1_5_999[,1] <= 0.1 & basic_ints_point1_5_999[,2] >= 0.1)
+
+sum(is.na(student_ints_point1_5_99[,1]) | is.na(student_ints_point1_5_99[,2]))
+sum(abs(student_ints_point1_5_99[,1]) == Inf | abs(student_ints_point1_5_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point1_5_99[,1] > -Inf & student_ints_point1_5_99[,1] <= 0.1 & student_ints_point1_5_99[,2] < Inf & student_ints_point1_5_99[,2] >= 0.1 & !is.na(student_ints_point1_5_99[,1]) & !is.na(student_ints_point1_5_99[,2])) / sum(student_ints_point1_5_99[,1] > -Inf & student_ints_point1_5_99[,2] < Inf & !is.na(student_ints_point1_5_99[,1]) & !is.na(student_ints_point1_5_99[,2])))
+
+sum(is.na(student_ints_point1_5_999[,1]) | is.na(student_ints_point1_5_999[,2]))
+sum(abs(student_ints_point1_5_999[,1]) == Inf | abs(student_ints_point1_5_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point1_5_999[,1] > -Inf & student_ints_point1_5_999[,1] <= 0.1 & student_ints_point1_5_999[,2] < Inf & student_ints_point1_5_999[,2] >= 0.1 & !is.na(student_ints_point1_5_999[,1]) & !is.na(student_ints_point1_5_999[,2])) / sum(student_ints_point1_5_999[,1] > -Inf & student_ints_point1_5_999[,2] < Inf & !is.na(student_ints_point1_5_999[,1]) & !is.na(student_ints_point1_5_999[,2])))
+
+#------------------------
+n <- 20
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.1), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point1_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point1_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point1_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point1_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point1_20_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point1_20_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point1_20_99[,1] <= 0.1 & perc_ints_point1_20_99[,2] >= 0.1)
+mean(perc_ints_point1_20_999[,1] <= 0.1 & perc_ints_point1_20_999[,2] >= 0.1)
+
+mean(basic_ints_point1_20_99[,1] <= 0.1 & basic_ints_point1_20_99[,2] >= 0.1)
+mean(basic_ints_point1_20_999[,1] <= 0.1 & basic_ints_point1_20_999[,2] >= 0.1)
+
+sum(is.na(student_ints_point1_20_99[,1]) | is.na(student_ints_point1_20_99[,2]))
+sum(abs(student_ints_point1_20_99[,1]) == Inf | abs(student_ints_point1_20_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point1_20_99[,1] > -Inf & student_ints_point1_20_99[,1] <= 0.1 & student_ints_point1_20_99[,2] < Inf & student_ints_point1_20_99[,2] >= 0.1 & !is.na(student_ints_point1_20_99[,1]) & !is.na(student_ints_point1_20_99[,2])) / sum(student_ints_point1_20_99[,1] > -Inf & student_ints_point1_20_99[,2] < Inf & !is.na(student_ints_point1_20_99[,1]) & !is.na(student_ints_point1_20_99[,2])))
+
+sum(is.na(student_ints_point1_20_999[,1]) | is.na(student_ints_point1_20_999[,2]))
+sum(abs(student_ints_point1_20_999[,1]) == Inf | abs(student_ints_point1_20_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point1_20_999[,1] > -Inf & student_ints_point1_20_999[,1] <= 0.1 & student_ints_point1_20_999[,2] < Inf & student_ints_point1_20_999[,2] >= 0.1 & !is.na(student_ints_point1_20_999[,1]) & !is.na(student_ints_point1_20_999[,2])) / sum(student_ints_point1_20_999[,1] > -Inf & student_ints_point1_20_999[,2] < Inf & !is.na(student_ints_point1_20_999[,1]) & !is.na(student_ints_point1_20_999[,2])))
+
+#------------------------
+n <- 50
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.1), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point1_50_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point1_50_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point1_50_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point1_50_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point1_50_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point1_50_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point1_50_99[,1] <= 0.1 & perc_ints_point1_50_99[,2] >= 0.1)
+mean(perc_ints_point1_50_999[,1] <= 0.1 & perc_ints_point1_50_999[,2] >= 0.1)
+
+mean(basic_ints_point1_50_99[,1] <= 0.1 & basic_ints_point1_50_99[,2] >= 0.1)
+mean(basic_ints_point1_50_999[,1] <= 0.1 & basic_ints_point1_50_999[,2] >= 0.1)
+
+sum(is.na(student_ints_point1_50_99[,1]) | is.na(student_ints_point1_50_99[,2]))
+sum(abs(student_ints_point1_50_99[,1]) == Inf | abs(student_ints_point1_50_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point1_50_99[,1] > -Inf & student_ints_point1_50_99[,1] <= 0.1 & student_ints_point1_50_99[,2] < Inf & student_ints_point1_50_99[,2] >= 0.1 & !is.na(student_ints_point1_50_99[,1]) & !is.na(student_ints_point1_50_99[,2])) / sum(student_ints_point1_50_99[,1] > -Inf & student_ints_point1_50_99[,2] < Inf & !is.na(student_ints_point1_50_99[,1]) & !is.na(student_ints_point1_50_99[,2])))
+
+sum(is.na(student_ints_point1_50_999[,1]) | is.na(student_ints_point1_50_999[,2]))
+sum(abs(student_ints_point1_50_999[,1]) == Inf | abs(student_ints_point1_50_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point1_50_999[,1] > -Inf & student_ints_point1_50_999[,1] <= 0.1 & student_ints_point1_50_999[,2] < Inf & student_ints_point1_50_999[,2] >= 0.1 & !is.na(student_ints_point1_50_999[,1]) & !is.na(student_ints_point1_50_999[,2])) / sum(student_ints_point1_50_999[,1] > -Inf & student_ints_point1_50_999[,2] < Inf & !is.na(student_ints_point1_50_999[,1]) & !is.na(student_ints_point1_50_999[,2])))
+
+#------------------------
+n <- 150
+sampmat <- matrix(rbernoulli(nsim*n, p = 0.1), ncol = nsim)
+#------------------------
+
+# percentile interval
+perc_ints_point1_150_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+perc_ints_point1_150_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {percentile(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# basic interval
+basic_ints_point1_150_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+basic_ints_point1_150_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {basic(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# studentized interval
+student_ints_point1_150_99 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 99, onlyint = TRUE)}
+student_ints_point1_150_999 <- foreach(i = 1:ncol(sampmat), .combine = rbind) %dopar% 
+  {studentized(sampmat[,i], parameter = "mean", B = 999, onlyint = TRUE)}
+
+# check for containment
+mean(perc_ints_point1_150_99[,1] <= 0.1 & perc_ints_point1_150_99[,2] >= 0.1)
+mean(perc_ints_point1_150_999[,1] <= 0.1 & perc_ints_point1_150_999[,2] >= 0.1)
+
+mean(basic_ints_point1_150_99[,1] <= 0.1 & basic_ints_point1_150_99[,2] >= 0.1)
+mean(basic_ints_point1_150_999[,1] <= 0.1 & basic_ints_point1_150_999[,2] >= 0.1)
+
+sum(is.na(student_ints_point1_150_99[,1]) | is.na(student_ints_point1_150_99[,2]))
+sum(abs(student_ints_point1_150_99[,1]) == Inf | abs(student_ints_point1_150_99[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point1_150_99[,1] > -Inf & student_ints_point1_150_99[,1] <= 0.1 & student_ints_point1_150_99[,2] < Inf & student_ints_point1_150_99[,2] >= 0.1 & !is.na(student_ints_point1_150_99[,1]) & !is.na(student_ints_point1_150_99[,2])) / sum(student_ints_point1_150_99[,1] > -Inf & student_ints_point1_150_99[,2] < Inf & !is.na(student_ints_point1_150_99[,1]) & !is.na(student_ints_point1_150_99[,2])))
+
+sum(is.na(student_ints_point1_150_999[,1]) | is.na(student_ints_point1_150_999[,2]))
+sum(abs(student_ints_point1_150_999[,1]) == Inf | abs(student_ints_point1_150_999[,2]) == Inf, na.rm = TRUE)
+
+(sum(student_ints_point1_150_999[,1] > -Inf & student_ints_point1_150_999[,1] <= 0.1 & student_ints_point1_150_999[,2] < Inf & student_ints_point1_150_999[,2] >= 0.1 & !is.na(student_ints_point1_150_999[,1]) & !is.na(student_ints_point1_150_999[,2])) / sum(student_ints_point1_150_999[,1] > -Inf & student_ints_point1_150_999[,2] < Inf & !is.na(student_ints_point1_150_999[,1]) & !is.na(student_ints_point1_150_999[,2])))
+
+#----------------------------
+#----------------------------
+#----------------------------
+#----------------------------
+#----------------------------
+
+# check for invalid values
+mean(perc_ints_point5_5_99[,1] == perc_ints_point5_5_99[,2])
+mean(perc_ints_point5_5_999[,1] == perc_ints_point5_5_999[,2])
+
+mean(basic_ints_point5_5_99[,1] < 0 | basic_ints_point5_5_99[,1] > 1 | basic_ints_point5_5_99[,2] > 1 | basic_ints_point5_5_99[,2] < 0)
+mean(basic_ints_point5_5_999[,1] < 0 | basic_ints_point5_5_999[,1] > 1 | basic_ints_point5_5_999[,2] > 1 | basic_ints_point5_5_999[,2] < 0)
+
+mean(student_ints_point5_5_99[,1] < 0 | student_ints_point5_5_99[,1] > 1 | student_ints_point5_5_99[,2] > 1 | student_ints_point5_5_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point5_5_999[,1] < 0 | student_ints_point5_5_999[,1] > 1 | student_ints_point5_5_999[,2] > 1 | student_ints_point5_5_999[,2] < 0, na.rm = TRUE)
+
+# check for invalid values
+mean(perc_ints_point5_20_99[,1] == perc_ints_point5_20_99[,2])
+mean(perc_ints_point5_20_999[,1] == perc_ints_point5_20_999[,2])
+
+mean(basic_ints_point5_20_99[,1] < 0 | basic_ints_point5_20_99[,1] > 1 | basic_ints_point5_20_99[,2] > 1 | basic_ints_point5_20_99[,2] < 0)
+mean(basic_ints_point5_20_999[,1] < 0 | basic_ints_point5_20_999[,1] > 1 | basic_ints_point5_20_999[,2] > 1 | basic_ints_point5_20_999[,2] < 0)
+
+mean(student_ints_point5_20_99[,1] < 0 | student_ints_point5_20_99[,1] > 1 | student_ints_point5_20_99[,2] > 1 | student_ints_point5_20_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point5_20_999[,1] < 0 | student_ints_point5_20_999[,1] > 1 | student_ints_point5_20_999[,2] > 1 | student_ints_point5_20_999[,2] < 0, na.rm = TRUE)
+
+# check for invalid values
+mean(perc_ints_point5_50_99[,1] == perc_ints_point5_50_99[,2])
+mean(perc_ints_point5_50_999[,1] == perc_ints_point5_50_999[,2])
+
+mean(basic_ints_point5_50_99[,1] < 0 | basic_ints_point5_50_99[,1] > 1 | basic_ints_point5_50_99[,2] > 1 | basic_ints_point5_50_99[,2] < 0)
+mean(basic_ints_point5_50_999[,1] < 0 | basic_ints_point5_50_999[,1] > 1 | basic_ints_point5_50_999[,2] > 1 | basic_ints_point5_50_999[,2] < 0)
+
+mean(student_ints_point5_50_99[,1] < 0 | student_ints_point5_50_99[,1] > 1 | student_ints_point5_50_99[,2] > 1 | student_ints_point5_50_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point5_50_999[,1] < 0 | student_ints_point5_50_999[,1] > 1 | student_ints_point5_50_999[,2] > 1 | student_ints_point5_50_999[,2] < 0, na.rm = TRUE)
+
+# check for invalid values
+mean(perc_ints_point5_150_99[,1] == perc_ints_point5_150_99[,2])
+mean(perc_ints_point5_150_999[,1] == perc_ints_point5_150_999[,2])
+
+mean(basic_ints_point5_150_99[,1] < 0 | basic_ints_point5_150_99[,1] > 1 | basic_ints_point5_150_99[,2] > 1 | basic_ints_point5_150_99[,2] < 0)
+mean(basic_ints_point5_150_999[,1] < 0 | basic_ints_point5_150_999[,1] > 1 | basic_ints_point5_150_999[,2] > 1 | basic_ints_point5_150_999[,2] < 0)
+
+mean(student_ints_point5_150_99[,1] < 0 | student_ints_point5_150_99[,1] > 1 | student_ints_point5_150_99[,2] > 1 | student_ints_point5_150_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point5_150_999[,1] < 0 | student_ints_point5_150_999[,1] > 1 | student_ints_point5_150_999[,2] > 1 | student_ints_point5_150_999[,2] < 0, na.rm = TRUE)
+
+#---------------------
+#---------------------
+#---------------------
+#---------------------
+
+# check for invalid values
+mean(perc_ints_point25_5_99[,1] == perc_ints_point25_5_99[,2])
+mean(perc_ints_point25_5_999[,1] == perc_ints_point25_5_999[,2])
+
+mean(basic_ints_point25_5_99[,1] < 0 | basic_ints_point25_5_99[,1] > 1 | basic_ints_point25_5_99[,2] > 1 | basic_ints_point25_5_99[,2] < 0)
+mean(basic_ints_point25_5_999[,1] < 0 | basic_ints_point25_5_999[,1] > 1 | basic_ints_point25_5_999[,2] > 1 | basic_ints_point25_5_999[,2] < 0)
+
+mean(student_ints_point25_5_99[,1] < 0 | student_ints_point25_5_99[,1] > 1 | student_ints_point25_5_99[,2] > 1 | student_ints_point25_5_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point25_5_999[,1] < 0 | student_ints_point25_5_999[,1] > 1 | student_ints_point25_5_999[,2] > 1 | student_ints_point25_5_999[,2] < 0, na.rm = TRUE)
+
+# check for invalid values
+mean(perc_ints_point25_20_99[,1] == perc_ints_point25_20_99[,2])
+mean(perc_ints_point25_20_999[,1] == perc_ints_point25_20_999[,2])
+
+mean(basic_ints_point25_20_99[,1] < 0 | basic_ints_point25_20_99[,1] > 1 | basic_ints_point25_20_99[,2] > 1 | basic_ints_point25_20_99[,2] < 0)
+mean(basic_ints_point25_20_999[,1] < 0 | basic_ints_point25_20_999[,1] > 1 | basic_ints_point25_20_999[,2] > 1 | basic_ints_point25_20_999[,2] < 0)
+
+mean(student_ints_point25_20_99[,1] < 0 | student_ints_point25_20_99[,1] > 1 | student_ints_point25_20_99[,2] > 1 | student_ints_point25_20_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point25_20_999[,1] < 0 | student_ints_point25_20_999[,1] > 1 | student_ints_point25_20_999[,2] > 1 | student_ints_point25_20_999[,2] < 0, na.rm = TRUE)
+
+# check for invalid values
+mean(perc_ints_point25_50_99[,1] == perc_ints_point25_50_99[,2])
+mean(perc_ints_point25_50_999[,1] == perc_ints_point25_50_999[,2])
+
+mean(basic_ints_point25_50_99[,1] < 0 | basic_ints_point25_50_99[,1] > 1 | basic_ints_point25_50_99[,2] > 1 | basic_ints_point25_50_99[,2] < 0)
+mean(basic_ints_point25_50_999[,1] < 0 | basic_ints_point25_50_999[,1] > 1 | basic_ints_point25_50_999[,2] > 1 | basic_ints_point25_50_999[,2] < 0)
+
+mean(student_ints_point25_50_99[,1] < 0 | student_ints_point25_50_99[,1] > 1 | student_ints_point25_50_99[,2] > 1 | student_ints_point25_50_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point25_50_999[,1] < 0 | student_ints_point25_50_999[,1] > 1 | student_ints_point25_50_999[,2] > 1 | student_ints_point25_50_999[,2] < 0, na.rm = TRUE)
+
+# check for invalid values
+mean(perc_ints_point25_150_99[,1] == perc_ints_point25_150_99[,2])
+mean(perc_ints_point25_150_999[,1] == perc_ints_point25_150_999[,2])
+
+mean(basic_ints_point25_150_99[,1] < 0 | basic_ints_point25_150_99[,1] > 1 | basic_ints_point25_150_99[,2] > 1 | basic_ints_point25_150_99[,2] < 0)
+mean(basic_ints_point25_150_999[,1] < 0 | basic_ints_point25_150_999[,1] > 1 | basic_ints_point25_150_999[,2] > 1 | basic_ints_point25_150_999[,2] < 0)
+
+mean(student_ints_point25_150_99[,1] < 0 | student_ints_point25_150_99[,1] > 1 | student_ints_point25_150_99[,2] > 1 | student_ints_point25_150_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point25_150_999[,1] < 0 | student_ints_point25_150_999[,1] > 1 | student_ints_point25_150_999[,2] > 1 | student_ints_point25_150_999[,2] < 0, na.rm = TRUE)
+
+#---------------------
+#---------------------
+#---------------------
+#---------------------
+
+# check for invalid values
+mean(perc_ints_point1_5_99[,1] == perc_ints_point1_5_99[,2])
+mean(perc_ints_point1_5_999[,1]  == perc_ints_point1_5_999[,2])
+
+mean(basic_ints_point1_5_99[,1] < 0 | basic_ints_point1_5_99[,1] > 1 | basic_ints_point1_5_99[,2] > 1 | basic_ints_point1_5_99[,2] < 0)
+mean(basic_ints_point1_5_999[,1] < 0 | basic_ints_point1_5_999[,1] > 1 | basic_ints_point1_5_999[,2] > 1 | basic_ints_point1_5_999[,2] < 0)
+
+mean(student_ints_point1_5_99[,1] < 0 | student_ints_point1_5_99[,1] > 1 | student_ints_point1_5_99[,2] > 1 | student_ints_point1_5_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point1_5_999[,1] < 0 | student_ints_point1_5_999[,1] > 1 | student_ints_point1_5_999[,2] > 1 | student_ints_point1_5_999[,2] < 0, na.rm = TRUE)
+
+# check for invalid values
+mean(perc_ints_point1_20_99[,1] == perc_ints_point1_20_99[,2])
+mean(perc_ints_point1_20_999[,1] == perc_ints_point1_20_999[,2])
+
+mean(basic_ints_point1_20_99[,1] < 0 | basic_ints_point1_20_99[,1] > 1 | basic_ints_point1_20_99[,2] > 1 | basic_ints_point1_20_99[,2] < 0)
+mean(basic_ints_point1_20_999[,1] < 0 | basic_ints_point1_20_999[,1] > 1 | basic_ints_point1_20_999[,2] > 1 | basic_ints_point1_20_999[,2] < 0)
+
+mean(student_ints_point1_20_99[,1] < 0 | student_ints_point1_20_99[,1] > 1 | student_ints_point1_20_99[,2] > 1 | student_ints_point1_20_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point1_20_999[,1] < 0 | student_ints_point1_20_999[,1] > 1 | student_ints_point1_20_999[,2] > 1 | student_ints_point1_20_999[,2] < 0, na.rm = TRUE)
+
+# check for invalid values
+mean(perc_ints_point1_50_99[,1] == perc_ints_point1_50_99[,2])
+mean(perc_ints_point1_50_999[,1] == perc_ints_point1_50_999[,2])
+
+mean(basic_ints_point1_50_99[,1] < 0 | basic_ints_point1_50_99[,1] > 1 | basic_ints_point1_50_99[,2] > 1 | basic_ints_point1_50_99[,2] < 0)
+mean(basic_ints_point1_50_999[,1] < 0 | basic_ints_point1_50_999[,1] > 1 | basic_ints_point1_50_999[,2] > 1 | basic_ints_point1_50_999[,2] < 0)
+
+mean(student_ints_point1_50_99[,1] < 0 | student_ints_point1_50_99[,1] > 1 | student_ints_point1_50_99[,2] > 1 | student_ints_point1_50_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point1_50_999[,1] < 0 | student_ints_point1_50_999[,1] > 1 | student_ints_point1_50_999[,2] > 1 | student_ints_point1_50_999[,2] < 0, na.rm = TRUE)
+
+# check for invalid values
+mean(perc_ints_point1_150_99[,1] == perc_ints_point1_150_99[,2])
+mean(perc_ints_point1_150_999[,1] == perc_ints_point1_150_999[,2])
+
+mean(basic_ints_point1_150_99[,1] < 0 | basic_ints_point1_150_99[,1] > 1 | basic_ints_point1_150_99[,2] > 1 | basic_ints_point1_150_99[,2] < 0)
+mean(basic_ints_point1_150_999[,1] < 0 | basic_ints_point1_150_999[,1] > 1 | basic_ints_point1_150_999[,2] > 1 | basic_ints_point1_150_999[,2] < 0)
+
+mean(student_ints_point1_150_99[,1] < 0 | student_ints_point1_150_99[,1] > 1 | student_ints_point1_150_99[,2] > 1 | student_ints_point1_150_99[,2] < 0, na.rm = TRUE)
+mean(student_ints_point1_150_999[,1] < 0 | student_ints_point1_150_999[,1] > 1 | student_ints_point1_150_999[,2] > 1 | student_ints_point1_150_999[,2] < 0, na.rm = TRUE)
+
+```
+
+# evaluate significance levels of z-test and t-test for the mean in varying scenarios
+
+```{r}
+
+set.seed(239874)
+
+#------------------------------
+n <- 10
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_rej_normal_10 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - 1)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_rej_normal_10 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+{t.test(sampmat[,i], mu = 1)$p.value < 0.05}
+
+#------------------------------
+
+#------------------------------
+n <- 40
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_rej_normal_40 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - 1)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_rej_normal_40 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+{t.test(sampmat[,i], mu = 1)$p.value < 0.05}
+
+#------------------------------
+
+#------------------------------
+n <- 100
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_rej_normal_100 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - 1)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_rej_normal_100 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+{t.test(sampmat[,i], mu = 1)$p.value < 0.05}
+
+#------------------------------
+#------------------------------
+#------------------------------
+#------------------------------
+#------------------------------
+
+#------------------------------
+n <- 5
+sampmat <- matrix(rexp(nsim*n, rate = 1), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_rej_exp_5 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - 1)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_rej_exp_5 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+{t.test(sampmat[,i], mu = 1)$p.value < 0.05}
+
+#------------------------------
+
+#------------------------------
+n <- 10
+sampmat <- matrix(rexp(nsim*n, rate = 1), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_rej_exp_10 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - 1)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_rej_exp_10 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+{t.test(sampmat[,i], mu = 1)$p.value < 0.05}
+
+#------------------------------
+
+#------------------------------
+n <- 20
+sampmat <- matrix(rexp(nsim*n, rate = 1), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_rej_exp_20 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - 1)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_rej_exp_20 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+{t.test(sampmat[,i], mu = 1)$p.value < 0.05}
+
+#------------------------------
+
+```
+
+# evaluate significance levels of the z-test for proportions
+
+```{r}
+
+set.seed(1998)
+
+#------------------------------
+n <- 5
+p0 <- 0.1
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.1_5 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+#------------------------------
+n <- 20
+p0 <- 0.1
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.1_20 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+#------------------------------
+n <- 50
+p0 <- 0.1
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.1_50 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+#------------------------------
+n <- 100
+p0 <- 0.1
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.1_100 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+
+#------------------------------
+n <- 5
+p0 <- 0.25
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.25_5 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+#------------------------------
+n <- 20
+p0 <- 0.25
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.25_20 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+#------------------------------
+n <- 50
+p0 <- 0.25
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.25_50 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+#------------------------------
+n <- 100
+p0 <- 0.25
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.25_100 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+
+#------------------------------
+n <- 5
+p0 <- 0.5
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.5_5 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+#------------------------------
+n <- 20
+p0 <- 0.5
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.5_20 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+#------------------------------
+n <- 50
+p0 <- 0.5
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.5_50 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+#------------------------------
+n <- 100
+p0 <- 0.5
+sampmat <- matrix(rbernoulli(nsim*n, p = p0), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_rej_0.5_100 <- foreach(i = 1:nsim, .combine = c) %dopar% 
+  {abs((mean(sampmat[,i]) - p0)/sqrt((p0*(1-p0))/n)) > qnorm(0.975)}
+
+#------------------------------
+
+mean(ztest_prop_rej_0.1_5)
+mean(ztest_prop_rej_0.1_20)
+mean(ztest_prop_rej_0.1_50)
+mean(ztest_prop_rej_0.1_100)
+
+mean(ztest_prop_rej_0.25_5)
+mean(ztest_prop_rej_0.25_20)
+mean(ztest_prop_rej_0.25_50)
+mean(ztest_prop_rej_0.25_100)
+
+mean(ztest_prop_rej_0.5_5)
+mean(ztest_prop_rej_0.5_20)
+mean(ztest_prop_rej_0.5_50)
+mean(ztest_prop_rej_0.5_100)
+
+```
+
+## evaluating power of z-test, t-test, and bootstrap hypothesis tests for the mean
+
+```{r}
+
+# NORMAL(1,1) POPULATION
+
+set.seed(7842238)
+
+#------------------------
+n <- 10
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+mu0s <- seq(-2, 4, 0.5)
+#------------------------
+
+# save TRUE if we reject a value (each row will be the test results for one sample; the columns represent which value of mu0)
+ztest_power_normal_10 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - mu0s)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_power_normal_10 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+{abs((mean(sampmat[,i]) - mu0s)/(sd(sampmat[,i])/sqrt(n))) > qt(0.975, df = n-1)}
+
+# if NOT contained we reject - save TRUE if NOT contained (i.e. rejected) 
+# (each row will be the test results for one sample; the columns represent the value of mu0 - colmeans gives the rejection proportion)
+perc_power_normal_10_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_norm_10_99[i,1] <= mu0s & perc_ints_norm_10_99[i,2] >= mu0s)}
+perc_power_normal_10_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_norm_10_999[i,1] <= mu0s & perc_ints_norm_10_999[i,2] >= mu0s)}
+
+basic_power_normal_10_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_norm_10_99[i,1] <= mu0s & basic_ints_norm_10_99[i,2] >= mu0s)}
+basic_power_normal_10_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_norm_10_999[i,1] <= mu0s & basic_ints_norm_10_999[i,2] >= mu0s)}
+
+students_power_normal_10_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_norm_10_99[i,1] <= mu0s & student_ints_norm_10_99[i,2] >= mu0s)}
+students_power_normal_10_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_norm_10_999[i,1] <= mu0s & student_ints_norm_10_999[i,2] >= mu0s)}
+
+normal_10_plot_dat <- data.frame(rejprop = c(colMeans(ztest_power_normal_10), colMeans(ttest_power_normal_10), colMeans(perc_power_normal_10_99),
+                                             colMeans(perc_power_normal_10_999), colMeans(basic_power_normal_10_99),
+                                             colMeans(basic_power_normal_10_999), colMeans(students_power_normal_10_99),
+                                             colMeans(students_power_normal_10_999)),
+                                 test = c(rep("z-test", length(mu0s)), rep("t-test", length(mu0s)), rep("perc99", length(mu0s)),
+                                   rep("perc999", length(mu0s)), rep("basic99", length(mu0s)), rep("basic999", length(mu0s)),
+                                   rep("student99", length(mu0s)), rep("student999", length(mu0s))),
+                                 mu0 = rep(mu0s, 8),
+                                 pop = rep("Normal", length(mu0s)*8), sampsize = 10)
+#------------------------
+n <- 40
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+mu0s <- seq(-2, 4, 0.5)
+#------------------------
+
+# save TRUE if we reject a value (each row will be the test results for one sample; the columns represent which value of mu0)
+ztest_power_normal_40 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - mu0s)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_power_normal_40 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+{abs((mean(sampmat[,i]) - mu0s)/(sd(sampmat[,i])/sqrt(n))) > qt(0.975, df = n-1)}
+
+# if NOT contained we reject - save TRUE if NOT contained (i.e. rejected) 
+# (each row will be the test results for one sample; the columns represent the value of mu0 - colmeans gives the rejection proportion)
+perc_power_normal_40_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_norm_40_99[i,1] <= mu0s & perc_ints_norm_40_99[i,2] >= mu0s)}
+perc_power_normal_40_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_norm_40_999[i,1] <= mu0s & perc_ints_norm_40_999[i,2] >= mu0s)}
+
+basic_power_normal_40_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_norm_40_99[i,1] <= mu0s & basic_ints_norm_40_99[i,2] >= mu0s)}
+basic_power_normal_40_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_norm_40_999[i,1] <= mu0s & basic_ints_norm_40_999[i,2] >= mu0s)}
+
+students_power_normal_40_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_norm_40_99[i,1] <= mu0s & student_ints_norm_40_99[i,2] >= mu0s)}
+students_power_normal_40_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_norm_40_999[i,1] <= mu0s & student_ints_norm_40_999[i,2] >= mu0s)}
+
+normal_40_plot_dat <- data.frame(rejprop = c(colMeans(ztest_power_normal_40), colMeans(ttest_power_normal_40), colMeans(perc_power_normal_40_99),
+                                             colMeans(perc_power_normal_40_999), colMeans(basic_power_normal_40_99),
+                                             colMeans(basic_power_normal_40_999), colMeans(students_power_normal_40_99),
+                                             colMeans(students_power_normal_40_999)),
+                                 test = c(rep("z-test", length(mu0s)), rep("t-test", length(mu0s)), rep("perc99", length(mu0s)),
+                                   rep("perc999", length(mu0s)), rep("basic99", length(mu0s)), rep("basic999", length(mu0s)),
+                                   rep("student99", length(mu0s)), rep("student999", length(mu0s))),
+                                 mu0 = rep(mu0s, 8),
+                                 pop = rep("Normal", length(mu0s)*8), sampsize = 40)
+
+#------------------------
+n <- 100
+sampmat <- matrix(rnorm(nsim*n, mean = 1, sd = 1), ncol = nsim)
+mu0s <- seq(-2, 4, 0.5)
+#------------------------
+
+# save TRUE if we reject a value (each row will be the test results for one sample; the columns represent which value of mu0)
+ztest_power_normal_100 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - mu0s)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_power_normal_100 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+{abs((mean(sampmat[,i]) - mu0s)/(sd(sampmat[,i])/sqrt(n))) > qt(0.975, df = n-1)}
+
+# if NOT contained we reject - save TRUE if NOT contained (i.e. rejected) 
+# (each row will be the test results for one sample; the columns represent the value of mu0 - colmeans gives the rejection proportion)
+perc_power_normal_100_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_norm_100_99[i,1] <= mu0s & perc_ints_norm_100_99[i,2] >= mu0s)}
+perc_power_normal_100_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_norm_100_999[i,1] <= mu0s & perc_ints_norm_100_999[i,2] >= mu0s)}
+
+basic_power_normal_100_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_norm_100_99[i,1] <= mu0s & basic_ints_norm_100_99[i,2] >= mu0s)}
+basic_power_normal_100_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_norm_100_999[i,1] <= mu0s & basic_ints_norm_100_999[i,2] >= mu0s)}
+
+students_power_normal_100_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_norm_100_99[i,1] <= mu0s & student_ints_norm_100_99[i,2] >= mu0s)}
+students_power_normal_100_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_norm_100_999[i,1] <= mu0s & student_ints_norm_100_999[i,2] >= mu0s)}
+
+normal_100_plot_dat <- data.frame(rejprop = c(colMeans(ztest_power_normal_100), colMeans(ttest_power_normal_100),
+                                             colMeans(perc_power_normal_100_99),
+                                             colMeans(perc_power_normal_100_999), colMeans(basic_power_normal_100_99),
+                                             colMeans(basic_power_normal_100_999), colMeans(students_power_normal_100_99),
+                                             colMeans(students_power_normal_100_999)),
+                                 test = c(rep("z-test", length(mu0s)), rep("t-test", length(mu0s)), rep("perc99", length(mu0s)),
+                                   rep("perc999", length(mu0s)), rep("basic99", length(mu0s)), rep("basic999", length(mu0s)),
+                                   rep("student99", length(mu0s)), rep("student999", length(mu0s))),
+                                 mu0 = rep(mu0s, 8),
+                                 pop = rep("Normal", length(mu0s)*8), sampsize = 100)
+
+
+```
+
+```{r}
+
+# EXPONENTIAL(1) POPULATION
+
+#------------------------
+n <- 5
+sampmat <- matrix(rexp(nsim*n, rate = 1), ncol = nsim)
+mu0s <- seq(-2, 4, 0.5)
+#------------------------
+
+# save TRUE if we reject a value (each row will be the test results for one sample; the columns represent which value of mu0)
+ztest_power_exp_5 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - mu0s)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_power_exp_5 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+{abs((mean(sampmat[,i]) - mu0s)/(sd(sampmat[,i])/sqrt(n))) > qt(0.975, df = n-1)}
+
+# if NOT contained we reject - save TRUE if NOT contained (i.e. rejected) 
+# (each row will be the test results for one sample; the columns represent the value of mu0 - colmeans gives the rejection proportion)
+perc_power_exp_5_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_exp_5_99[i,1] <= mu0s & perc_ints_exp_5_99[i,2] >= mu0s)}
+perc_power_exp_5_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_exp_5_999[i,1] <= mu0s & perc_ints_exp_5_999[i,2] >= mu0s)}
+
+basic_power_exp_5_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_exp_5_99[i,1] <= mu0s & basic_ints_exp_5_99[i,2] >= mu0s)}
+basic_power_exp_5_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_exp_5_999[i,1] <= mu0s & basic_ints_exp_5_999[i,2] >= mu0s)}
+
+# convert any infinite bounds to NA and then drop those rows with NA for bounds
+student_ints_exp_5_99_withna <- apply(student_ints_exp_5_99, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_exp_5_99_nona <- na.omit(student_ints_exp_5_99_withna)
+students_power_exp_5_99 <- foreach(i = 1:nrow(student_ints_exp_5_99_nona), .combine = rbind) %dopar% 
+  {!(student_ints_exp_5_99_nona[i,1] <= mu0s & student_ints_exp_5_99_nona[i,2] >= mu0s)}
+
+student_ints_exp_5_999_withna <- apply(student_ints_exp_5_999, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_exp_5_999_nona <- na.omit(student_ints_exp_5_999_withna)
+students_power_exp_5_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_exp_5_999_nona[i,1] <= mu0s & student_ints_exp_5_999_nona[i,2] >= mu0s)}
+
+exp_5_plot_dat <- data.frame(rejprop = c(colMeans(ztest_power_exp_5), colMeans(ttest_power_exp_5),
+                                             colMeans(perc_power_exp_5_99),
+                                             colMeans(perc_power_exp_5_999), colMeans(basic_power_exp_5_99),
+                                             colMeans(basic_power_exp_5_999), 
+                                         colMeans(students_power_exp_5_99),
+                                             colMeans(students_power_exp_5_999)),
+                                 test = c(rep("z-test", length(mu0s)), rep("t-test", length(mu0s)), rep("perc99", length(mu0s)),
+                                   rep("perc999", length(mu0s)), rep("basic99", length(mu0s)), rep("basic999", length(mu0s)),
+                                   rep("student99", length(mu0s)), rep("student999", length(mu0s))),
+                                 mu0 = rep(mu0s, 8),
+                                 pop = rep("Exponential", length(mu0s)*8), sampsize = 5)
+
+#------------------------
+n <- 10
+sampmat <- matrix(rexp(nsim*n, rate = 1), ncol = nsim)
+mu0s <- seq(-2, 4, 0.5)
+#------------------------
+
+# save TRUE if we reject a value (each row will be the test results for one sample; the columns represent which value of mu0)
+ztest_power_exp_10 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - mu0s)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_power_exp_10 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+{abs((mean(sampmat[,i]) - mu0s)/(sd(sampmat[,i])/sqrt(n))) > qt(0.975, df = n-1)}
+
+# if NOT contained we reject - save TRUE if NOT contained (i.e. rejected) 
+# (each row will be the test results for one sample; the columns represent the value of mu0 - colmeans gives the rejection proportion)
+perc_power_exp_10_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_exp_10_99[i,1] <= mu0s & perc_ints_exp_10_99[i,2] >= mu0s)}
+perc_power_exp_10_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_exp_10_999[i,1] <= mu0s & perc_ints_exp_10_999[i,2] >= mu0s)}
+
+basic_power_exp_10_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_exp_10_99[i,1] <= mu0s & basic_ints_exp_10_99[i,2] >= mu0s)}
+basic_power_exp_10_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_exp_10_999[i,1] <= mu0s & basic_ints_exp_10_999[i,2] >= mu0s)}
+
+students_power_exp_10_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_exp_10_99[i,1] <= mu0s & student_ints_exp_10_99[i,2] >= mu0s)}
+students_power_exp_10_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_exp_10_999[i,1] <= mu0s & student_ints_exp_10_999[i,2] >= mu0s)}
+
+exp_10_plot_dat <- data.frame(rejprop = c(colMeans(ztest_power_exp_10), colMeans(ttest_power_exp_10),
+                                             colMeans(perc_power_exp_10_99),
+                                             colMeans(perc_power_exp_10_999), colMeans(basic_power_exp_10_99),
+                                             colMeans(basic_power_exp_10_999), colMeans(students_power_exp_10_99),
+                                             colMeans(students_power_exp_10_999)),
+                                 test = c(rep("z-test", length(mu0s)), rep("t-test", length(mu0s)), rep("perc99", length(mu0s)),
+                                   rep("perc999", length(mu0s)), rep("basic99", length(mu0s)), rep("basic999", length(mu0s)),
+                                   rep("student99", length(mu0s)), rep("student999", length(mu0s))),
+                                 mu0 = rep(mu0s, 8),
+                                 pop = rep("Exponential", length(mu0s)*8), sampsize = 10)
+
+#------------------------
+n <- 20
+sampmat <- matrix(rexp(nsim*n, rate = 1), ncol = nsim)
+mu0s <- seq(-2, 4, 0.5)
+#------------------------
+
+# save TRUE if we reject a value (each row will be the test results for one sample; the columns represent which value of mu0)
+ztest_power_exp_20 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - mu0s)/(1/sqrt(n))) > qnorm(0.975)}
+
+ttest_power_exp_20 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+{abs((mean(sampmat[,i]) - mu0s)/(sd(sampmat[,i])/sqrt(n))) > qt(0.975, df = n-1)}
+
+# if NOT contained we reject - save TRUE if NOT contained (i.e. rejected) 
+# (each row will be the test results for one sample; the columns represent the value of mu0 - colmeans gives the rejection proportion)
+perc_power_exp_20_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_exp_20_99[i,1] <= mu0s & perc_ints_exp_20_99[i,2] >= mu0s)}
+perc_power_exp_20_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_exp_20_999[i,1] <= mu0s & perc_ints_exp_20_999[i,2] >= mu0s)}
+
+basic_power_exp_20_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_exp_20_99[i,1] <= mu0s & basic_ints_exp_20_99[i,2] >= mu0s)}
+basic_power_exp_20_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_exp_20_999[i,1] <= mu0s & basic_ints_exp_20_999[i,2] >= mu0s)}
+
+students_power_exp_20_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_exp_20_99[i,1] <= mu0s & student_ints_exp_20_99[i,2] >= mu0s)}
+students_power_exp_20_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_exp_20_999[i,1] <= mu0s & student_ints_exp_20_999[i,2] >= mu0s)}
+
+exp_20_plot_dat <- data.frame(rejprop = c(colMeans(ztest_power_exp_20), colMeans(ttest_power_exp_20),
+                                             colMeans(perc_power_exp_20_99),
+                                             colMeans(perc_power_exp_20_999), colMeans(basic_power_exp_20_99),
+                                             colMeans(basic_power_exp_20_999), colMeans(students_power_exp_20_99),
+                                             colMeans(students_power_exp_20_999)),
+                                 test = c(rep("z-test", length(mu0s)), rep("t-test", length(mu0s)), rep("perc99", length(mu0s)),
+                                   rep("perc999", length(mu0s)), rep("basic99", length(mu0s)), rep("basic999", length(mu0s)),
+                                   rep("student99", length(mu0s)), rep("student999", length(mu0s))),
+                                 mu0 = rep(mu0s, 8),
+                                 pop = rep("Exponential", length(mu0s)*8), sampsize = 20)
+
+```
+
+# evaluating power of z-test and bootstrap tests for the proportion
+
+```{r}
+
+#------------------------------
+n <- 5
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.1
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject (when p0 = 0 this will be NA but leaving in sequence of null values for sake of other intervals)
+ztest_prop_power_point1_5 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point1_5_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point1_5_99[i,1] <= p0s & perc_ints_point1_5_99[i,2] >= p0s)}
+perc_power_point1_5_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point1_5_999[i,1] <= p0s & perc_ints_point1_5_999[i,2] >= p0s)}
+
+basic_power_point1_5_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point1_5_99[i,1] <= p0s & basic_ints_point1_5_99[i,2] >= p0s)}
+basic_power_point1_5_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point1_5_999[i,1] <= p0s & basic_ints_point1_5_999[i,2] >= p0s)}
+
+student_ints_point1_5_99_withna <- apply(student_ints_point1_5_99, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point1_5_99_nona <- na.omit(student_ints_point1_5_99_withna)
+student_power_point1_5_99 <- foreach(i = 1:nrow(student_ints_point1_5_99_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point1_5_99_nona[i,1] <= p0s & student_ints_point1_5_99_nona[i,2] >= p0s)}
+
+student_ints_point1_5_999_withna <- apply(student_ints_point1_5_999, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point1_5_999_nona <- na.omit(student_ints_point1_5_999_withna)
+student_power_point1_5_999 <- foreach(i = 1:nrow(student_ints_point1_5_999_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point1_5_999_nona[i,1] <= p0s & student_ints_point1_5_999_nona[i,2] >= p0s)}
+
+bernoulli_5_point1_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point1_5), colMeans(perc_power_point1_5_99),
+                                             colMeans(perc_power_point1_5_999), colMeans(basic_power_point1_5_99),
+                                             colMeans(basic_power_point1_5_999), as.numeric(student_power_point1_5_99),
+                                             rep(NA, length(p0s))),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.1)", length(p0s)*7), sampsize = 5, truep = 0.1)
+
+#------------------------------
+n <- 20
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.1
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point1_20 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point1_20_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point1_20_99[i,1] <= p0s & perc_ints_point1_20_99[i,2] >= p0s)}
+perc_power_point1_20_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point1_20_999[i,1] <= p0s & perc_ints_point1_20_999[i,2] >= p0s)}
+
+basic_power_point1_20_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point1_20_99[i,1] <= p0s & basic_ints_point1_20_99[i,2] >= p0s)}
+basic_power_point1_20_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point1_20_999[i,1] <= p0s & basic_ints_point1_20_999[i,2] >= p0s)}
+
+student_ints_point1_20_99_withna <- apply(student_ints_point1_20_99, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point1_20_99_nona <- na.omit(student_ints_point1_20_99_withna)
+student_power_point1_20_99 <- foreach(i = 1:nrow(student_ints_point1_20_99_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point1_20_99_nona[i,1] <= p0s & student_ints_point1_20_99_nona[i,2] >= p0s)}
+
+student_ints_point1_20_999_withna <- apply(student_ints_point1_20_999, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point1_20_999_nona <- na.omit(student_ints_point1_20_999_withna)
+student_power_point1_20_999 <- foreach(i = 1:nrow(student_ints_point1_20_999_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point1_20_999_nona[i,1] <= p0s & student_ints_point1_20_999_nona[i,2] >= p0s)}
+
+bernoulli_20_point1_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point1_20), colMeans(perc_power_point1_20_99),
+                                             colMeans(perc_power_point1_20_999), colMeans(basic_power_point1_20_99),
+                                             colMeans(basic_power_point1_20_999), colSums(student_power_point1_20_99, na.rm = TRUE)/10000,
+                                             colSums(student_power_point1_20_999, na.rm = TRUE)/10000),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.1)", length(p0s)*7), sampsize = 20, truep = 0.1)
+
+#------------------------------
+n <- 50
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.1
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point1_50 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point1_50_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point1_50_99[i,1] <= p0s & perc_ints_point1_50_99[i,2] >= p0s)}
+perc_power_point1_50_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point1_50_999[i,1] <= p0s & perc_ints_point1_50_999[i,2] >= p0s)}
+
+basic_power_point1_50_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point1_50_99[i,1] <= p0s & basic_ints_point1_50_99[i,2] >= p0s)}
+basic_power_point1_50_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point1_50_999[i,1] <= p0s & basic_ints_point1_50_999[i,2] >= p0s)}
+
+student_ints_point1_50_99_withna <- apply(student_ints_point1_50_99, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point1_50_99_nona <- na.omit(student_ints_point1_50_99_withna)
+student_power_point1_50_99 <- foreach(i = 1:nrow(student_ints_point1_50_99_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point1_50_99_nona[i,1] <= p0s & student_ints_point1_50_99_nona[i,2] >= p0s)}
+
+student_ints_point1_50_999_withna <- apply(student_ints_point1_50_999, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point1_50_999_nona <- na.omit(student_ints_point1_50_999_withna)
+student_power_point1_50_999 <- foreach(i = 1:nrow(student_ints_point1_50_999_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point1_50_999_nona[i,1] <= p0s & student_ints_point1_50_999_nona[i,2] >= p0s)}
+
+bernoulli_50_point1_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point1_50), colMeans(perc_power_point1_50_99),
+                                             colMeans(perc_power_point1_50_999), colMeans(basic_power_point1_50_99),
+                                             colMeans(basic_power_point1_50_999), colMeans(student_power_point1_50_99),
+                                             colMeans(student_power_point1_50_999)),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.1)", length(p0s)*7), sampsize = 50, truep = 0.1)
+
+#------------------------------
+n <- 150
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.1
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point1_150 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point1_150_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point1_150_99[i,1] <= p0s & perc_ints_point1_150_99[i,2] >= p0s)}
+perc_power_point1_150_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point1_150_999[i,1] <= p0s & perc_ints_point1_150_999[i,2] >= p0s)}
+
+basic_power_point1_150_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point1_150_99[i,1] <= p0s & basic_ints_point1_150_99[i,2] >= p0s)}
+basic_power_point1_150_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point1_150_999[i,1] <= p0s & basic_ints_point1_150_999[i,2] >= p0s)}
+
+student_ints_point1_150_99_withna <- apply(student_ints_point1_150_99, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point1_150_99_nona <- na.omit(student_ints_point1_150_99_withna)
+student_power_point1_150_99 <- foreach(i = 1:nrow(student_ints_point1_150_99_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point1_150_99_nona[i,1] <= p0s & student_ints_point1_150_99_nona[i,2] >= p0s)}
+
+student_ints_point1_150_999_withna <- apply(student_ints_point1_150_999, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point1_150_999_nona <- na.omit(student_ints_point1_150_999_withna)
+student_power_point1_150_999 <- foreach(i = 1:nrow(student_ints_point1_150_999_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point1_150_999_nona[i,1] <= p0s & student_ints_point1_150_999_nona[i,2] >= p0s)}
+
+bernoulli_150_point1_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point1_150), colMeans(perc_power_point1_150_99),
+                                             colMeans(perc_power_point1_150_999), colMeans(basic_power_point1_150_99),
+                                             colMeans(basic_power_point1_150_999), colMeans(student_power_point1_150_99),
+                                             colMeans(student_power_point1_150_999)),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.1)", length(p0s)*7), sampsize = 150, truep = 0.1)
+
+```
+
+```{r}
+
+#------------------------------
+n <- 5
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.25
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point25_5 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point25_5_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point25_5_99[i,1] <= p0s & perc_ints_point25_5_99[i,2] >= p0s)}
+perc_power_point25_5_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point25_5_999[i,1] <= p0s & perc_ints_point25_5_999[i,2] >= p0s)}
+
+basic_power_point25_5_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point25_5_99[i,1] <= p0s & basic_ints_point25_5_99[i,2] >= p0s)}
+basic_power_point25_5_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point25_5_999[i,1] <= p0s & basic_ints_point25_5_999[i,2] >= p0s)}
+
+student_ints_point25_5_99_withna <- apply(student_ints_point25_5_99, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point25_5_99_nona <- na.omit(student_ints_point25_5_99_withna)
+student_power_point25_5_99 <- foreach(i = 1:nrow(student_ints_point25_5_99_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point25_5_99_nona[i,1] <= p0s & student_ints_point25_5_99_nona[i,2] >= p0s)}
+
+student_ints_point25_5_999_withna <- apply(student_ints_point25_5_999, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point25_5_999_nona <- na.omit(student_ints_point25_5_999_withna)
+student_power_point25_5_999 <- foreach(i = 1:nrow(student_ints_point25_5_999_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point25_5_999_nona[i,1] <= p0s & student_ints_point25_5_999_nona[i,2] >= p0s)} # all NA since no intervals were well defined
+
+bernoulli_5_point25_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point25_5), colMeans(perc_power_point25_5_99),
+                                             colMeans(perc_power_point25_5_999), colMeans(basic_power_point25_5_99),
+                                             colMeans(basic_power_point25_5_999), colMeans(student_power_point25_5_99),
+                                             rep(NA, length(p0s))),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.25)", length(p0s)*7), sampsize = 5, truep = 0.25)
+
+#------------------------------
+n <- 20
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.25
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point25_20 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point25_20_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point25_20_99[i,1] <= p0s & perc_ints_point25_20_99[i,2] >= p0s)}
+perc_power_point25_20_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point25_20_999[i,1] <= p0s & perc_ints_point25_20_999[i,2] >= p0s)}
+
+basic_power_point25_20_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point25_20_99[i,1] <= p0s & basic_ints_point25_20_99[i,2] >= p0s)}
+basic_power_point25_20_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point25_20_999[i,1] <= p0s & basic_ints_point25_20_999[i,2] >= p0s)}
+
+student_ints_point25_20_99_withna <- apply(student_ints_point25_20_99, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point25_20_99_nona <- na.omit(student_ints_point25_20_99_withna)
+student_power_point25_20_99 <- foreach(i = 1:nrow(student_ints_point25_20_99_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point25_20_99_nona[i,1] <= p0s & student_ints_point25_20_99_nona[i,2] >= p0s)}
+
+student_ints_point25_20_999_withna <- apply(student_ints_point25_20_999, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point25_20_999_nona <- na.omit(student_ints_point25_20_999_withna)
+student_power_point25_20_999 <- foreach(i = 1:nrow(student_ints_point25_20_999_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point25_20_999_nona[i,1] <= p0s & student_ints_point25_20_999_nona[i,2] >= p0s)}
+
+bernoulli_20_point25_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point25_20), colMeans(perc_power_point25_20_99),
+                                             colMeans(perc_power_point25_20_999), colMeans(basic_power_point25_20_99),
+                                             colMeans(basic_power_point25_20_999), colMeans(student_power_point25_20_99),
+                                             colMeans(student_power_point25_20_999)),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.25)", length(p0s)*7), sampsize = 20, truep = 0.25)
+
+#------------------------------
+n <- 50
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.25
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point25_50 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point25_50_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point25_50_99[i,1] <= p0s & perc_ints_point25_50_99[i,2] >= p0s)}
+perc_power_point25_50_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point25_50_999[i,1] <= p0s & perc_ints_point25_50_999[i,2] >= p0s)}
+
+basic_power_point25_50_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point25_50_99[i,1] <= p0s & basic_ints_point25_50_99[i,2] >= p0s)}
+basic_power_point25_50_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point25_50_999[i,1] <= p0s & basic_ints_point25_50_999[i,2] >= p0s)}
+
+student_ints_point25_50_99_withna <- apply(student_ints_point25_50_99, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point25_50_99_nona <- na.omit(student_ints_point25_50_99_withna)
+student_power_point25_50_99 <- foreach(i = 1:nrow(student_ints_point25_50_99_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point25_50_99_nona[i,1] <= p0s & student_ints_point25_50_99_nona[i,2] >= p0s)}
+
+student_ints_point25_50_999_withna <- apply(student_ints_point25_50_999, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point25_50_999_nona <- na.omit(student_ints_point25_50_999_withna)
+student_power_point25_50_999 <- foreach(i = 1:nrow(student_ints_point25_50_999_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point25_50_999_nona[i,1] <= p0s & student_ints_point25_50_999_nona[i,2] >= p0s)}
+
+bernoulli_50_point25_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point25_50), colMeans(perc_power_point25_50_99),
+                                             colMeans(perc_power_point25_50_999), colMeans(basic_power_point25_50_99),
+                                             colMeans(basic_power_point25_50_999), colMeans(student_power_point25_50_99),
+                                             colMeans(student_power_point25_50_999)),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.25)", length(p0s)*7), sampsize = 50, truep = 0.25)
+
+#------------------------------
+n <- 150
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.25
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point25_150 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point25_150_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point25_150_99[i,1] <= p0s & perc_ints_point25_150_99[i,2] >= p0s)}
+perc_power_point25_150_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point25_150_999[i,1] <= p0s & perc_ints_point25_150_999[i,2] >= p0s)}
+
+basic_power_point25_150_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point25_150_99[i,1] <= p0s & basic_ints_point25_150_99[i,2] >= p0s)}
+basic_power_point25_150_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point25_150_999[i,1] <= p0s & basic_ints_point25_150_999[i,2] >= p0s)}
+
+student_power_point25_150_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_point25_150_99[i,1] <= p0s & student_ints_point25_150_99[i,2] >= p0s)}
+student_power_point25_150_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_point25_150_999[i,1] <= p0s & student_ints_point25_150_999[i,2] >= p0s)}
+
+bernoulli_150_point25_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point25_150), colMeans(perc_power_point25_150_99),
+                                             colMeans(perc_power_point25_150_999), colMeans(basic_power_point25_150_99),
+                                             colMeans(basic_power_point25_150_999), colSums(student_power_point25_150_99, na.rm = TRUE)/10000,
+                                             colSums(student_power_point25_150_999, na.rm = TRUE)/10000),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.25)", length(p0s)*7), sampsize = 150, truep = 0.25)
+
+```
+
+```{r}
+
+#------------------------------
+n <- 5
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.5
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point5_5 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point5_5_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point5_5_99[i,1] <= p0s & perc_ints_point5_5_99[i,2] >= p0s)}
+perc_power_point5_5_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point5_5_999[i,1] <= p0s & perc_ints_point5_5_999[i,2] >= p0s)}
+
+basic_power_point5_5_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point5_5_99[i,1] <= p0s & basic_ints_point5_5_99[i,2] >= p0s)}
+basic_power_point5_5_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point5_5_999[i,1] <= p0s & basic_ints_point5_5_999[i,2] >= p0s)}
+
+student_ints_point5_5_99_withna <- apply(student_ints_point5_5_99, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point5_5_99_nona <- na.omit(student_ints_point5_5_99_withna)
+students_power_point5_5_99 <- foreach(i = 1:nrow(student_ints_point5_5_99_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point5_5_99_nona[i,1] <= p0s & student_ints_point5_5_99_nona[i,2] >= p0s)}
+
+student_ints_point5_5_999_withna <- apply(student_ints_point5_5_999, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point5_5_999_nona <- na.omit(student_ints_point5_5_999_withna)
+students_power_point5_5_999 <- foreach(i = 1:nrow(student_ints_point5_5_999_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point5_5_999_nona[i,1] <= p0s & student_ints_point5_5_999_nona[i,2] >= p0s)} # set to NA since no intervals were truly defined
+
+bernoulli_5_point5_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point5_5), colMeans(perc_power_point5_5_99),
+                                             colMeans(perc_power_point5_5_999), colMeans(basic_power_point5_5_99),
+                                             colMeans(basic_power_point5_5_999), colMeans(students_power_point5_5_99),
+                                             rep(NA, length(p0s))),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.5)", length(p0s)*7), sampsize = 5, truep = 0.50)
+
+#------------------------------
+n <- 20
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.5
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point5_20 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point5_20_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point5_20_99[i,1] <= p0s & perc_ints_point5_20_99[i,2] >= p0s)}
+perc_power_point5_20_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point5_20_999[i,1] <= p0s & perc_ints_point5_20_999[i,2] >= p0s)}
+
+basic_power_point5_20_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point5_20_99[i,1] <= p0s & basic_ints_point5_20_99[i,2] >= p0s)}
+basic_power_point5_20_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point5_20_999[i,1] <= p0s & basic_ints_point5_20_999[i,2] >= p0s)}
+
+student_ints_point5_20_99_withna <- apply(student_ints_point5_20_99, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point5_20_99_nona <- na.omit(student_ints_point5_20_99_withna)
+students_power_point5_20_99 <- foreach(i = 1:nrow(student_ints_point5_20_99_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point5_20_99_nona[i,1] <= p0s & student_ints_point5_20_99_nona[i,2] >= p0s)}
+
+student_ints_point5_20_999_withna <- apply(student_ints_point5_20_999, c(1, 2), function(x) ifelse(abs(x) == Inf, NA, x))
+student_ints_point5_20_999_nona <- na.omit(student_ints_point5_20_999_withna)
+students_power_point5_20_999 <- foreach(i = 1:nrow(student_ints_point5_20_999_nona), .combine = rbind) %dopar% 
+  {!(student_ints_point5_20_999_nona[i,1] <= p0s & student_ints_point5_20_999_nona[i,2] >= p0s)}
+
+bernoulli_20_point5_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point5_20), colMeans(perc_power_point5_20_99),
+                                             colMeans(perc_power_point5_20_999), colMeans(basic_power_point5_20_99),
+                                             colMeans(basic_power_point5_20_999), colMeans(students_power_point5_20_99),
+                                             colMeans(students_power_point5_20_999)),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.5)", length(p0s)*7), sampsize = 20, truep = 0.50)
+
+#------------------------------
+n <- 50
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.5
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point5_50 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point5_50_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point5_50_99[i,1] <= p0s & perc_ints_point5_50_99[i,2] >= p0s)}
+perc_power_point5_50_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point5_50_999[i,1] <= p0s & perc_ints_point5_50_999[i,2] >= p0s)}
+
+basic_power_point5_50_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point5_50_99[i,1] <= p0s & basic_ints_point5_50_99[i,2] >= p0s)}
+basic_power_point5_50_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point5_50_999[i,1] <= p0s & basic_ints_point5_50_999[i,2] >= p0s)}
+
+student_power_point5_50_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_point5_50_99[i,1] <= p0s & student_ints_point5_50_99[i,2] >= p0s)}
+student_power_point5_50_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_point5_50_999[i,1] <= p0s & student_ints_point5_50_999[i,2] >= p0s)}
+
+bernoulli_50_point5_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point5_50), colMeans(perc_power_point5_50_99),
+                                             colMeans(perc_power_point5_50_999), colMeans(basic_power_point5_50_99),
+                                             colMeans(basic_power_point5_50_999), colSums(student_power_point5_50_99, na.rm = TRUE)/10000,
+                                             colSums(student_power_point5_50_999, na.rm = TRUE)/10000),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.5)", length(p0s)*7), sampsize = 50, truep = 0.50)
+
+#------------------------------
+n <- 150
+p0s <- seq(0, 1, 0.02)
+ptrue <- 0.5
+sampmat <- matrix(rbernoulli(nsim*n, p = ptrue), ncol = nsim)
+#------------------------------
+
+# save TRUE if we reject 
+ztest_prop_power_point5_150 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {abs((mean(sampmat[,i]) - p0s)/sqrt((p0s*(1-p0s))/n)) > qnorm(0.975)}
+
+perc_power_point5_150_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point5_150_99[i,1] <= p0s & perc_ints_point5_150_99[i,2] >= p0s)}
+perc_power_point5_150_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(perc_ints_point5_150_999[i,1] <= p0s & perc_ints_point5_150_999[i,2] >= p0s)}
+
+basic_power_point5_150_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point5_150_99[i,1] <= p0s & basic_ints_point5_150_99[i,2] >= p0s)}
+basic_power_point5_150_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(basic_ints_point5_150_999[i,1] <= p0s & basic_ints_point5_150_999[i,2] >= p0s)}
+
+student_power_point5_150_99 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_point5_150_99[i,1] <= p0s & student_ints_point5_150_99[i,2] >= p0s)}
+student_power_point5_150_999 <- foreach(i = 1:nsim, .combine = rbind) %dopar% 
+  {!(student_ints_point5_150_999[i,1] <= p0s & student_ints_point5_150_999[i,2] >= p0s)}
+
+bernoulli_150_point5_plot_dat <- data.frame(rejprop = c(colMeans(ztest_prop_power_point5_150), colMeans(perc_power_point5_150_99),
+                                             colMeans(perc_power_point5_150_999), colMeans(basic_power_point5_150_99),
+                                             colMeans(basic_power_point5_150_999), colSums(student_power_point5_150_99, na.rm = TRUE)/10000,
+                                             colSums(student_power_point5_150_999, na.rm = TRUE)/10000),
+                                 test = c(rep("z-test", length(p0s)), rep("perc99", length(p0s)),
+                                   rep("perc999", length(p0s)), rep("basic99", length(p0s)), rep("basic999", length(p0s)),
+                                   rep("student99", length(p0s)), rep("student999", length(p0s))),
+                                 mu0 = rep(p0s, 7),
+                                 pop = rep("Bernoulli(0.5)", length(p0s)*7), sampsize = 150, truep = 0.50)
+
+```
+
+# organize results and plot
+
+```{r}
+
+#########
+mean_plotdat_normal <- rbind(normal_10_plot_dat, normal_40_plot_dat, normal_100_plot_dat)
+mean_plotdat_normal$test <- factor(mean_plotdat_normal$test, levels = c("z-test", "t-test", "basic99", "basic999", "perc99", "perc999",
+                                                                        "student99", "student999"))
+
+#########
+mean_plotdat_exp <- rbind(exp_5_plot_dat, exp_10_plot_dat, exp_20_plot_dat)
+mean_plotdat_exp$test <- factor(mean_plotdat_exp$test, levels = c("z-test", "t-test", "basic99", "basic999", "perc99", "perc999",
+                                                                        "student99", "student999"))
+
+#########
+prop_plotdat_point1 <- rbind(bernoulli_5_point1_plot_dat, bernoulli_20_point1_plot_dat, bernoulli_50_point1_plot_dat,
+                             bernoulli_150_point1_plot_dat)
+prop_plotdat_point1$test <- factor(prop_plotdat_point1$test, levels = c("z-test", "basic99", "basic999", "perc99", "perc999",
+                                                                        "student99", "student999"))
+
+#########
+prop_plotdat_point25 <- rbind(bernoulli_5_point25_plot_dat, bernoulli_20_point25_plot_dat, bernoulli_50_point25_plot_dat,
+                             bernoulli_150_point25_plot_dat)
+prop_plotdat_point25$test <- factor(prop_plotdat_point25$test, levels = c("z-test", "basic99", "basic999", "perc99", "perc999",
+                                                                        "student99", "student999"))
+
+#########
+prop_plotdat_point5 <- rbind(bernoulli_5_point5_plot_dat, bernoulli_20_point5_plot_dat, bernoulli_50_point5_plot_dat,
+                             bernoulli_150_point5_plot_dat)
+prop_plotdat_point5$test <- factor(prop_plotdat_point5$test, levels = c("z-test", "basic99", "basic999", "perc99", "perc999",
+                                                                        "student99", "student999"))
+
+```
+
+
+```{r}
+
+#########
+ggplot(mean_plotdat_normal) +
+  geom_line(aes(mu0, rejprop, linetype = as.factor(sampsize))) +
+  geom_vline(aes(xintercept = 1), linetype = "F1") + # long-dashed line at true parameter value
+  geom_hline(aes(yintercept = 0.05), linetype = "F1") +
+  facet_wrap(~ test, nrow = 2, labeller = as_labeller(c("z-test" = "z-test", "t-test" = "t-test", "basic99" = "Basic (B = 99)", 
+                                                        "basic999" = "Basic (B = 999)", "perc99" = "Percentile (B = 99)", 
+                                                        "perc999" = "Percentile (B = 999)", "student99" = "Studentized (B = 99)", 
+                                                        "student999" = "Studentized (B = 999)"))) +
+  theme_bw() +
+  labs(x = "Hypothesized mean", y = "Rejection rate") +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted")) + # solid = 10, dashed = 40, dotted = 100
+  scale_x_continuous(breaks = unique(mean_plotdat_normal$mu0)[seq(1, 13, 2)]) +
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+#########
+ggplot(mean_plotdat_exp) +
+  geom_line(aes(mu0, rejprop, linetype = as.factor(sampsize))) +
+  geom_vline(aes(xintercept = 1), linetype = "F1") + # long-dashed line at true parameter value
+  geom_hline(aes(yintercept = 0.05), linetype = "F1") +
+  facet_wrap(~ test, nrow = 2, labeller = as_labeller(c("z-test" = "z-test", "t-test" = "t-test", "basic99" = "Basic (B = 99)", 
+                                                        "basic999" = "Basic (B = 999)", "perc99" = "Percentile (B = 99)", 
+                                                        "perc999" = "Percentile (B = 999)", "student99" = "Studentized (B = 99)", 
+                                                        "student999" = "Studentized (B = 999)"))) +
+  theme_bw() +
+  labs(x = "Hypothesized mean", y = "Rejection rate") +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted")) + # solid = 5, dashed = 10, dotted = 20
+  theme(legend.position = "none") +
+  scale_x_continuous(breaks = unique(mean_plotdat_exp$mu0)[seq(1, 13, 2)]) +
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+#########
+ggplot(prop_plotdat_all)+
+  geom_line(aes(mu0, rejprop, linetype = as.factor(sampsize))) +
+  geom_vline(aes(xintercept = truep), linetype = "F1") + # long-dashed line at true parameter values
+  geom_hline(aes(yintercept = 0.05), linetype = "F1") +
+  facet_grid(pop ~ test, labeller = as_labeller(c("z-test" = "z-test", "basic99" = "Basic (B = 99)", 
+                                                        "basic999" = "Basic (B = 999)", "perc99" = "Percentile (B = 99)", 
+                                                        "perc999" = "Percentile (B = 999)", "student99" = "Studentized (B = 99)", 
+                                                        "student999" = "Studentized (B = 999)", 
+                                                        "Bernoulli(0.1)" = "Bernoulli(0.1)",
+                                                        "Bernoulli(0.25)" = "Bernoulli(0.25)",
+                                                        "Bernoulli(0.5)" = "Bernoulli(0.5)"))) +
+  theme_bw() +
+  labs(x = "Hypothesized proportion", y = "Rejection rate") +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted", "dotdash")) + # solid = 5, dashed = 20, dotted = 50, dotdash = 150
+  theme(legend.position = "none") +
+  scale_x_continuous(breaks = seq(0, 1, 0.2)) +
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
