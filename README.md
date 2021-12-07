@@ -35,7 +35,7 @@ And the output is:
 
 Each of the functions in the package returns the desired interval, its assumptions, and plots to check those assumptions.
 
-In this case, the bootstrap distribution is symmetric, which makes the assumption about symmetry in the shifted sampling distribution reasonable. However, based on the Central Limit Theorem (CLT), the sampling distribution of the sample mean depends on the variance of the population. Therefore, the second assumption behind this interval is not met. Notice however, that it contains the population parameter. Our article goes further into what happens in the long run if we use this method incorrectly.
+In this case, the bootstrap distribution is symmetric, which makes the assumption about symmetry in the shifted sampling distribution reasonable. However, based on the Central Limit Theorem (CLT), the sampling distribution of the sample mean depends on the variance of the population. Therefore, the second assumption behind this interval is not met. Furthermore, the bootstrap distribution cannot be expected to approximate the sampling distribution well. Notice however, that it contains the population parameter. Our article gives further details about what can happen in the long run if we use these methods incorrectly.
 
 # Contributing
 
