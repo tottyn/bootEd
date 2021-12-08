@@ -85,8 +85,8 @@ methods are reasonable.
     # gather column names and values to create one factor variable giving population and one giving sample sd
     sd_data <- gather(sd_data, key = "population", value = "sd")
 
-Finally we plot the distributions. Though there is rough symmetry, these
-distributions are not approximately the same across different
+Finally, we plot the distributions. These distributions are not symmetric and
+they are not approximately the same across different
 populations. Therefore, the assumptions of the basic and percentile
 bootstrap intervals are not met.
 
@@ -131,9 +131,8 @@ used, we may see improvmenets, but this is not guaranteed.
 
 # Studentized interval
 
-One source of varation in the sampling distributions generated earlier
-was the spread of the values. Each distribution had a different amount
-of spread and some were more or less skewed than others. The studentized
+A possible source of variation in the sampling distributions generated 
+earlier is the spread of the values. The studentized
 interval assumes that the studentized sampling distribution, which takes
 into account the spread in each sample, is approximately the same across
 different populations.
@@ -190,8 +189,8 @@ populations:
     sd_data_studentized <- gather(sd_data_studentized, key = "population", value = "sd")
 
 Though these distributions are more similar than when we only shifted by
-the population standard deviation, there are still differences in their
-skewness. Therefore, the assumptions of the studentized interval are not
+the population standard deviation, there are still some differences in spread. 
+Therefore, the assumptions of the studentized interval are not totally
 met in this case either.
 
     # plot distributions
@@ -206,9 +205,9 @@ met in this case either.
 ![](examples_files/figure-markdown_strict/unnamed-chunk-10-1.png)
 
 If we apply this method in this scenario, the coverage proportion is a
-bit closer to 0.90 but still far off. The second-level bootstrap
-estimate of standard error can be unreliable when the sample size is
-small.
+bit closer to 0.90, but it is still quite far off. This could also be due to 
+the small sample size which making the second-level bootstrap estimate of 
+standard error less reliable.
 
     # for each sample, calculate studentized interval
     studentized_ints <- t(apply(chisq2mat, 2, studentized, parameter = "sd", B = 99, siglevel = 0.10, onlyint = TRUE))
