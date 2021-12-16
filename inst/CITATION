@@ -7,7 +7,7 @@ citEntry(entry = "Unpublished",
   note         = "Pending publication",
   textVersion  = paste("Totty, N. (2021).",
         "bootEd : Construct Bootstrap Intervals Using A Variety of Methods.",
-        "https://github.com/tottyn/bootEd"
+        "https://github.com/tottyn/bootEd."
   )
 
 )
