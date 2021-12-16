@@ -5,8 +5,9 @@ citEntry(entry = "Unpublished",
   author       = personList(as.person("Njesa Totty")),
   year         = "2021",
   note         = "Pending publication",
-  textVersion  = paste("Njesa Totty (2021).",
-        "bootEd : Construct Bootstrap Intervals Using A Variety of Methods."
+  textVersion  = paste("Totty, N. (2021).",
+        "bootEd : Construct Bootstrap Intervals Using A Variety of Methods.",
+        "https://github.com/tottyn/bootEd"
   )
 
 )
