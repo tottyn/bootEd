@@ -1,7 +1,7 @@
 citHeader("To cite bootEd in publications use:")
 
 citEntry(entry = "Unpublished",
-  title        = "Teach Bootstrap Intervals With An Emphasis On Checking Assumptions",
+  title        = "Teach Bootstrap Intervals with an Emphasis on Checking Assumptions",
   author       = personList(as.person("Njesa Totty")),
   year         = "2021",
   note         = "Pending publication",
