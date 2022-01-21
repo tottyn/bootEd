@@ -29,11 +29,535 @@ registerDoParallel(numcores - 1)
 
 ```
 
-# obtain studentized sampling distributions 
+# Check shifted and studentized distributions 
 
 ```{r, eval = FALSE}
 
-# Check if the studentized distribution is pivotal - NORMAL POPULATION
+# Check if the shifted distribution is pivotal or symmetric - EXPONENTIAL CASE
+
+lambdas <- c(0.25, 0.5, 1.00, 1.50)
+
+# ---------------------------
+n <- 5
+boot_t_stats_5_shift <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), 
+                                   sim4 = numeric(10000), n = "N = 5")
+# ---------------------------
+
+for(i in 1:length(lambdas)){ # for each value of lambda
+  
+  for(j in 1:nrow(boot_t_stats_5_shift)){ # for each row (repeat 10000 times) 
+
+    # calculate shifted statistic
+    boot_t_stats_5_shift[j, i] <- (mean(rexp(n, rate = lambdas[i])) - (1/lambdas[i]))
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 10
+boot_t_stats_10_shift <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), 
+                                   sim4 = numeric(10000), n = "N = 10")
+# ---------------------------
+
+for(i in 1:length(lambdas)){ # for each value of lambda
+  
+  for(j in 1:nrow(boot_t_stats_10_shift)){ # for each row (repeat 10000 times) 
+
+    # calculate shifted statistic
+    boot_t_stats_10_shift[j, i] <- (mean(rexp(n, rate = lambdas[i])) - (1/lambdas[i]))
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 20
+boot_t_stats_20_shift <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), 
+                                   sim4 = numeric(10000), n = "N = 20")
+# ---------------------------
+
+for(i in 1:length(lambdas)){ # for each value of lambda
+  
+  for(j in 1:nrow(boot_t_stats_20_shift)){ # for each row (repeat 10000 times) 
+
+    # calculate shifted statistic
+    boot_t_stats_20_shift[j, i] <- (mean(rexp(n, rate = lambdas[i])) - (1/lambdas[i]))
+    
+  }
+  
+}
+
+# combine all data together
+boot_t_stats_data_all_shift <- rbind(boot_t_stats_5_shift, boot_t_stats_10_shift, boot_t_stats_20_shift)
+colnames(boot_t_stats_data_all_shift) <- c("Exponential(0.25)", "Exponential(0.5)", "Exponential(1)",
+                                                "Exponential(1.5)", "N")
+
+boot_t_stats_data_all_shift_long <- gather(boot_t_stats_data_all_shift, key = "simnumber", value = "bootstat", 1:4)
+
+# plot it
+ggplot(boot_t_stats_data_all_shift_long) +
+  geom_histogram(aes(bootstat, fill = simnumber, color = simnumber), alpha = 0.3, position = "dodge") +
+  facet_grid(~ N)
+
+```
+
+```{r}
+
+# Check if the shifted distribution is pivotal or symmetric - NORMAL CASE
+
+means <- c(0, 1, 2, 5)
+sds <- sqrt(c(1, 1, 4, 0.25))
+
+# ---------------------------
+n <- 10
+boot_t_stats_10_shift_norm <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), 
+                                   sim4 = numeric(10000), n = "N = 10")
+# ---------------------------
+
+for(i in 1:length(means)){ # for each population
+  
+  for(j in 1:nrow(boot_t_stats_10_shift_norm)){ # for each row (repeat 10000 times) 
+
+    # calculate shifted statistic
+    boot_t_stats_10_shift_norm[j, i] <- (mean(rnorm(n, mean = means[i], sd = sds[i])) - means[i])
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 40
+boot_t_stats_40_shift_norm <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), 
+                                   sim4 = numeric(10000), n = "N = 40")
+# ---------------------------
+
+for(i in 1:length(means)){ # for each population
+  
+  for(j in 1:nrow(boot_t_stats_40_shift_norm)){ # for each row (repeat 10000 times) 
+
+    # calculate shifted statistic
+    boot_t_stats_40_shift_norm[j, i] <- (mean(rnorm(n, mean = means[i], sd = sds[i])) - means[i])
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 100
+boot_t_stats_100_shift_norm <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), 
+                                   sim4 = numeric(10000), n = "N = 100")
+# ---------------------------
+
+for(i in 1:length(means)){ # for each population
+  
+  for(j in 1:nrow(boot_t_stats_100_shift_norm)){ # for each row (repeat 10000 times) 
+
+    # calculate shifted statistic
+    boot_t_stats_100_shift_norm[j, i] <- (mean(rnorm(n, mean = means[i], sd = sds[i])) - means[i])
+    
+  }
+  
+}
+
+# combine all data together
+boot_t_stats_data_all_shift_norm <- rbind(boot_t_stats_10_shift_norm, boot_t_stats_40_shift_norm,
+                                          boot_t_stats_100_shift_norm)
+colnames(boot_t_stats_data_all_shift_norm) <- c("Normal(0,1)", "Normal(1,1)", "Normal(2,4)", "Normal(5,0.25)", "N")
+
+boot_t_stats_data_all_shift_long_norm <- gather(boot_t_stats_data_all_shift_norm, key = "simnumber", 
+                                                value = "bootstat", 1:4)
+
+# plot it
+ggplot(boot_t_stats_data_all_shift_long_norm) +
+  geom_histogram(aes(bootstat, fill = simnumber, color = simnumber), alpha = 0.3, position = "dodge") +
+  facet_grid(~ N)
+
+```
+
+```{r}
+
+ps <- c(0.1, 0.25, 0.5)
+# sample sizes are 5, 20, 50, and 150
+
+# ---------------------------
+n <- 5
+boot_t_stats_5_shift_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), 
+                                        n = "N = 5")
+# ---------------------------
+
+for(i in 1:length(ps)){ # for each population
+  
+  for(j in 1:nrow(boot_t_stats_5_shift_bern)){ # for each row (repeat 10000 times) 
+
+    # calculate shifted statistic
+    boot_t_stats_5_shift_bern[j, i] <- (mean(rbernoulli(n, p = ps[i])) - ps[i])
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 20
+boot_t_stats_20_shift_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000),
+                                         n = "N = 20")
+# ---------------------------
+
+for(i in 1:length(ps)){ # for each population
+  
+  for(j in 1:nrow(boot_t_stats_20_shift_bern)){ # for each row (repeat 10000 times) 
+
+    # calculate shifted statistic
+    boot_t_stats_20_shift_bern[j, i] <- (mean(rbernoulli(n, p = ps[i])) - ps[i])
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 50
+boot_t_stats_50_shift_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), 
+                                         n = "N = 50")
+# ---------------------------
+
+for(i in 1:length(ps)){ # for each population
+  
+  for(j in 1:nrow(boot_t_stats_50_shift_bern)){ # for each row (repeat 10000 times) 
+
+    # calculate shifted statistic
+    boot_t_stats_50_shift_bern[j, i] <- (mean(rbernoulli(n, p = ps[i])) - ps[i])
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 150
+boot_t_stats_150_shift_bern <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), 
+                                          n = "N = 150")
+# ---------------------------
+
+for(i in 1:length(ps)){ # for each population
+  
+  for(j in 1:nrow(boot_t_stats_150_shift_bern)){ # for each row (repeat 10000 times) 
+
+    # calculate shifted statistic
+    boot_t_stats_150_shift_bern[j, i] <- (mean(rbernoulli(n, p = ps[i])) - ps[i])
+    
+  }
+  
+}
+
+# combine all data together
+boot_t_stats_data_all_shift_bern <- rbind(boot_t_stats_5_shift_bern, boot_t_stats_20_shift_bern,
+                                          boot_t_stats_50_shift_bern, boot_t_stats_150_shift_bern)
+colnames(boot_t_stats_data_all_shift_bern) <- c("Bernoulli(0.1)", "Bernoulli(0.25)", "Bernoulli(0.5)", "N")
+
+boot_t_stats_data_all_shift_long_bern <- gather(boot_t_stats_data_all_shift_bern, key = "simnumber", 
+                                                value = "bootstat", 1:3)
+
+# plot it
+ggplot(boot_t_stats_data_all_shift_long_bern) +
+  geom_histogram(aes(bootstat, fill = simnumber, color = simnumber), alpha = 0.3, position = "dodge") +
+  facet_grid(~ N)
+
+```
+
+```{r}
+
+# re-leveling for plots
+boot_t_stats_data_all_shift_long_norm$N <- factor(boot_t_stats_data_all_shift_long_norm$N, 
+                                                  levels = c("N = 10", "N = 40", "N = 100"))
+boot_t_stats_data_all_shift_long$N <- factor(boot_t_stats_data_all_shift_long$N, 
+                                                  levels = c("N = 5", "N = 10", "N = 20"))
+boot_t_stats_data_all_shift_long_bern$N <- factor(boot_t_stats_data_all_shift_long_bern$N, 
+                                                  levels = c("N = 5", "N = 20", "N = 50", "N = 150"))
+
+# plot it
+ggplot(boot_t_stats_data_all_shift_long_norm) +
+  geom_histogram(aes(bootstat), color = "gray50") +
+  facet_grid(N ~ simnumber) +
+  theme_bw() +
+  labs(y = "Frequency", x = "Shifted sample means") +
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+# plot it
+ggplot(boot_t_stats_data_all_shift_long) +
+  geom_histogram(aes(bootstat), color = "gray50") +
+  facet_grid(N ~ simnumber) +
+  theme_bw() +
+  labs(y = "Frequency", x = "Shifted sample means") +
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+# plot it
+ggplot(boot_t_stats_data_all_shift_long_bern) +
+  geom_histogram(aes(bootstat), color = "gray50") +
+  facet_grid(N ~ simnumber) +
+  theme_bw() +
+  labs(y = "Frequency", x = "Shifted sample proportions") +
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+```
+
+
+
+
+```{r, eval = FALSE}
+
+# Check if the studentized distribution is pivotal
+
+set.seed(322)
+lambdas <- c(0.25, 0.5, 1.00, 1.50)
+
+# ---------------------------
+n <- 5
+B <- 99
+boot_t_stats_5_99 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, n = 5)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column
+  
+  for(j in 1:nrow(boot_t_stats_5_99)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_5_99[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 5
+B <- 999
+boot_t_stats_5_999 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
+                                 n = 5)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_5_999)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_5_999[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 10
+B <- 99
+boot_t_stats_10_99 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, 
+                                 n = 10)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_10_99)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_10_99[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 10
+B <- 999
+boot_t_stats_10_999 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
+                                  n = 10)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_10_999)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_10_999[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 20
+B <- 99
+boot_t_stats_20_99 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, 
+                                 n = 20)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_20_99)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_20_99[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 20
+B <- 999
+boot_t_stats_20_999 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
+                                  n = 20)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_20_999)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_20_999[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 100
+B <- 99
+boot_t_stats_100_99 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, 
+                                  n = 100)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_100_99)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_100_99[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# ---------------------------
+n <- 100
+B <- 999
+boot_t_stats_100_999 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
+                                   n = 100)
+# ---------------------------
+
+for(i in 1:4){ # for each sim column (repeat 5 times)
+  
+  for(j in 1:nrow(boot_t_stats_100_999)){ # for each row (repeat 10000 times) 
+    
+    # take initial sample
+    samp <- rexp(n, rate = lambdas[i])
+    # calculate sample statistic
+    meansamp <- mean(samp)
+    # calculate bootstrap sample statistics (B bootstraps of size n)
+    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
+    # calculate bootstrap estimate of standard error
+    se_boot <- sd(mean_boot_samps)
+    # calculate bootstrap t-statistics
+    boot_t_stats_100_999[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
+    
+  }
+  
+}
+
+# combine all data together
+boot_t_stats_data_all <- rbind(boot_t_stats_5_99, boot_t_stats_5_999, boot_t_stats_10_99, boot_t_stats_10_999, boot_t_stats_20_99, 
+                               boot_t_stats_20_999)
+
+boot_t_stats_data_all_long <- gather(boot_t_stats_data_all, key = "simnumber", value = "bootstat", 1:4)
+
+# what if we put different values of B in the same cell and make one of the facets the population
+plotexp <- ggplot(boot_t_stats_data_all_long) +
+  geom_histogram(aes(bootstat, fill = as.factor(B)), position = "dodge", alpha = 0.8) +
+  facet_grid(n ~ simnumber, labeller = as_labeller(c("5" = "N = 5", "10" = "N = 10", "20" = "N = 20", 
+                                                     "sim1" = "Exponential(0.25)", "sim2" = "Exponential(0.5)",
+                                                     "sim3" = "Exponential(1)", "sim4" = "Exponential(1.5)"))) +
+  theme_bw() +
+  labs(y = "Frequency", x = "Studentized sample means") +
+  scale_fill_manual(values = c("grey5", "grey70")) + # dark grey for B = 99 and light gray for B = 999
+  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10, face = "bold"),
+        legend.title = element_text(size = 10, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
+        strip.background = element_rect(fill = "white"))
+
+```
+
+```{r, eval = FALSE}
+
+# Check if the studentized distribution is pivotal - NORMAL CASE
 
 set.seed(23222)
 means <- c(0, 1, 2, 5)
@@ -205,8 +729,8 @@ boot_t_stats_data_all_norm <- rbind(boot_t_stats_10_99_norm,
 
 boot_t_stats_data_all_long_norm <- gather(boot_t_stats_data_all_norm, key = "simnumber", value = "bootstat", 1:4)
 
-# plot it
-ggplot(boot_t_stats_data_all_long_norm) +
+# what if we put different values of B in the same cell and make one of the facets the population
+plotnorm <- ggplot(boot_t_stats_data_all_long_norm) +
   geom_histogram(aes(bootstat, fill = as.factor(B)), position = "dodge", alpha = 0.8) +
   facet_grid(n ~ simnumber, labeller = as_labeller(c("10" = "N = 10", "40" = "N = 40", "100" = "N = 100", 
                                                      "sim1" = "Normal(0,1)", "sim2" = "Normal(1,1)",
@@ -225,196 +749,11 @@ ggplot(boot_t_stats_data_all_long_norm) +
 
 ```{r, eval = FALSE}
 
-# Check if the studentized distribution is pivotal - EXPONENTIAL POPULATION
-
-set.seed(322)
-lambdas <- c(0.25, 0.5, 1.00, 1.50)
-
-# ---------------------------
-n <- 5
-B <- 99
-boot_t_stats_5_99 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, n = 5)
-# ---------------------------
-
-for(i in 1:4){ # for each sim column
-  
-  for(j in 1:nrow(boot_t_stats_5_99)){ # for each row (repeat 10000 times) 
-    
-    # take initial sample
-    samp <- rexp(n, rate = lambdas[i])
-    # calculate sample statistic
-    meansamp <- mean(samp)
-    # calculate bootstrap sample statistics (B bootstraps of size n)
-    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
-    # calculate bootstrap estimate of standard error
-    se_boot <- sd(mean_boot_samps)
-    # calculate bootstrap t-statistics
-    boot_t_stats_5_99[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
-    
-  }
-  
-}
-
-# ---------------------------
-n <- 5
-B <- 999
-boot_t_stats_5_999 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
-                                 n = 5)
-# ---------------------------
-
-for(i in 1:4){ # for each sim column (repeat 5 times)
-  
-  for(j in 1:nrow(boot_t_stats_5_999)){ # for each row (repeat 10000 times) 
-    
-    # take initial sample
-    samp <- rexp(n, rate = lambdas[i])
-    # calculate sample statistic
-    meansamp <- mean(samp)
-    # calculate bootstrap sample statistics (B bootstraps of size n)
-    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
-    # calculate bootstrap estimate of standard error
-    se_boot <- sd(mean_boot_samps)
-    # calculate bootstrap t-statistics
-    boot_t_stats_5_999[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
-    
-  }
-  
-}
-
-# ---------------------------
-n <- 10
-B <- 99
-boot_t_stats_10_99 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, 
-                                 n = 10)
-# ---------------------------
-
-for(i in 1:4){ # for each sim column (repeat 5 times)
-  
-  for(j in 1:nrow(boot_t_stats_10_99)){ # for each row (repeat 10000 times) 
-    
-    # take initial sample
-    samp <- rexp(n, rate = lambdas[i])
-    # calculate sample statistic
-    meansamp <- mean(samp)
-    # calculate bootstrap sample statistics (B bootstraps of size n)
-    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
-    # calculate bootstrap estimate of standard error
-    se_boot <- sd(mean_boot_samps)
-    # calculate bootstrap t-statistics
-    boot_t_stats_10_99[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
-    
-  }
-  
-}
-
-# ---------------------------
-n <- 10
-B <- 999
-boot_t_stats_10_999 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
-                                  n = 10)
-# ---------------------------
-
-for(i in 1:4){ # for each sim column (repeat 5 times)
-  
-  for(j in 1:nrow(boot_t_stats_10_999)){ # for each row (repeat 10000 times) 
-    
-    # take initial sample
-    samp <- rexp(n, rate = lambdas[i])
-    # calculate sample statistic
-    meansamp <- mean(samp)
-    # calculate bootstrap sample statistics (B bootstraps of size n)
-    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
-    # calculate bootstrap estimate of standard error
-    se_boot <- sd(mean_boot_samps)
-    # calculate bootstrap t-statistics
-    boot_t_stats_10_999[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
-    
-  }
-  
-}
-
-# ---------------------------
-n <- 20
-B <- 99
-boot_t_stats_20_99 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 99, 
-                                 n = 20)
-# ---------------------------
-
-for(i in 1:4){ # for each sim column (repeat 5 times)
-  
-  for(j in 1:nrow(boot_t_stats_20_99)){ # for each row (repeat 10000 times) 
-    
-    # take initial sample
-    samp <- rexp(n, rate = lambdas[i])
-    # calculate sample statistic
-    meansamp <- mean(samp)
-    # calculate bootstrap sample statistics (B bootstraps of size n)
-    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
-    # calculate bootstrap estimate of standard error
-    se_boot <- sd(mean_boot_samps)
-    # calculate bootstrap t-statistics
-    boot_t_stats_20_99[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
-    
-  }
-  
-}
-
-# ---------------------------
-n <- 20
-B <- 999
-boot_t_stats_20_999 <- data.frame(sim1 = numeric(10000), sim2 = numeric(10000), sim3 = numeric(10000), sim4 = numeric(10000), B = 999, 
-                                  n = 20)
-# ---------------------------
-
-for(i in 1:4){ # for each sim column (repeat 5 times)
-  
-  for(j in 1:nrow(boot_t_stats_20_999)){ # for each row (repeat 10000 times) 
-    
-    # take initial sample
-    samp <- rexp(n, rate = lambdas[i])
-    # calculate sample statistic
-    meansamp <- mean(samp)
-    # calculate bootstrap sample statistics (B bootstraps of size n)
-    mean_boot_samps <- colMeans(matrix(sample(samp, n*B, replace = TRUE), ncol = B))
-    # calculate bootstrap estimate of standard error
-    se_boot <- sd(mean_boot_samps)
-    # calculate bootstrap t-statistics
-    boot_t_stats_20_999[j, i] <- (meansamp - (1/lambdas[i]))/se_boot
-    
-  }
-  
-}
-
-# combine all data together
-boot_t_stats_data_all <- rbind(boot_t_stats_5_99, boot_t_stats_5_999, boot_t_stats_10_99, boot_t_stats_10_999, boot_t_stats_20_99, 
-                               boot_t_stats_20_999)
-
-boot_t_stats_data_all_long <- gather(boot_t_stats_data_all, key = "simnumber", value = "bootstat", 1:4)
-
-# plot it
-ggplot(boot_t_stats_data_all_long) +
-  geom_histogram(aes(bootstat, fill = as.factor(B)), position = "dodge", alpha = 0.8) +
-  facet_grid(n ~ simnumber, labeller = as_labeller(c("5" = "N = 5", "10" = "N = 10", "20" = "N = 20", 
-                                                     "sim1" = "Exponential(0.25)", "sim2" = "Exponential(0.5)",
-                                                     "sim3" = "Exponential(1)", "sim4" = "Exponential(1.5)"))) +
-  theme_bw() +
-  labs(y = "Frequency", x = "Studentized sample means") +
-  scale_fill_manual(values = c("grey5", "grey70")) + # dark grey for B = 99 and light gray for B = 999
-  theme(legend.position = "none", axis.title = element_text(size = 15, face = "bold"),
-        axis.text = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 10, face = "bold"),
-        legend.title = element_text(size = 10, face = "bold"),
-        strip.text = element_text(colour = 'black', size = 12, face = "bold"),
-        strip.background = element_rect(fill = "white"))
-
-```
-
-```{r, eval = FALSE}
-
 # Check if the studentized distribution is pivotal - BERNOULLI CASE
 
 set.seed(23332)
 ps <- c(0.1, 0.25, 0.5)
+# sample sizes are 5, 20, 50, and 150
 
 # ---------------------------
 n <- 5
@@ -634,8 +973,8 @@ boot_t_stats_data_all_bern <- rbind(boot_t_stats_5_99_bern,
 
 boot_t_stats_data_all_long_bern <- gather(boot_t_stats_data_all_bern, key = "simnumber", value = "bootstat", 1:3)
 
-# plot it
-ggplot(boot_t_stats_data_all_long_bern) +
+# what if we put different values of B in the same cell and make one of the facets the population
+plotbern <- ggplot(boot_t_stats_data_all_long_bern) +
   geom_histogram(aes(bootstat, fill = as.factor(B)), position = "dodge", alpha = 0.8) +
   facet_grid(n ~ simnumber, labeller = as_labeller(c("5" = "N = 5", "20" = "N = 20", "50" = "N = 50", "150" = "N = 150", 
                                                      "sim1" = "Bernoulli(0.1)", "sim2" = "Bernoulli(0.25)",
@@ -649,6 +988,20 @@ ggplot(boot_t_stats_data_all_long_bern) +
         legend.title = element_text(size = 10, face = "bold"),
         strip.text = element_text(colour = 'black', size = 12, face = "bold"),
         strip.background = element_rect(fill = "white"))
+
+```
+
+```{r}
+
+gridExtra::grid.arrange(plotnorm, plotexp, plotbern, nrow = 2)
+
+gridExtra::grid.arrange(
+  grobs = list(plotnorm, plotexp, plotbern),
+  widths = c(1, 1, 1, 1),
+  layout_matrix = rbind(c(1, 1, 2, 2),
+                        c(NA, 3, 3, NA))
+)
+
 
 ```
 
