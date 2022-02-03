@@ -54,7 +54,7 @@ percentile <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FA
     # print results of confidence interval
     cat("The percentile bootstrap interval for the", parameter, "is: ")
     cat("(", interval[1], ", ", interval[2], ").\n", sep = "")
-    cat("\nIf it is reasonable to assume that the shifted sampling distribution of the \nstatistic of interest is symmetric and does not depend on any unknown parameters, \nsuch as the underlying population variance, then this method can be used.")
+    cat("\nAssumptions: the shifted sampling distribution of the statistic of interest is symmetric \nand it does not depend on any unknown parameters, such as \nthe underlying population variance.")
 
   }
 
@@ -114,7 +114,7 @@ basic <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = FALSE){
     # print out confidence intervals
     cat("The basic bootstrap interval for the", parameter, "is: ")
     cat("(", interval[1], ", ", interval[2], ").\n", sep = "")
-    cat("\nIf it is reasonable to assume that the shifted sampling distribution of the \nstatistic of interest does not depend on any unknown parameters, \nsuch as the underlying population variance, then this method can be used.")
+    cat("\nAssumptions: the shifted sampling distribution of the statistic \nof interest does not depend on any unknown parameters, \nsuch as the underlying population variance.")
 
   }
 
@@ -202,7 +202,7 @@ studentized <- function(sample, parameter, B = 999, siglevel = 0.05, onlyint = F
     # print results
     cat("The studentized bootstrap interval for the", parameter, "is: ")
     cat("(", interval[1], ", ", interval[2], ").\n", sep = "")
-    cat("\nIf it is reasonable to assume that the studentized sampling distribution of the \nstatistic of interest does not depend on any unknown parameters, \nthen this method can be used.")
+    cat("\nAssumption: the studentized sampling distribution of the statistic \nof interest does not depend on any unknown parameters.")
 
   }
 
