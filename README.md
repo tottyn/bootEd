@@ -1,7 +1,7 @@
 
 # bootEd
 
-`bootEd` was created for teaching simple bootstrap intervals to undergraduate students in introductory statistics courses. Specifically, this package was created so that teachers can emphasize the assumptions behind the percentile, basic, and studentized bootstrap intervals when teaching them. These methods are outlined by Davison, A., & Hinkley, D. (1997) and Efron, B., & Tibshirani, R.J. (1994).
+`bootEd` was created for teaching simple bootstrap intervals to undergraduate students in introductory statistics courses. Specifically, this package was created so that teachers can emphasize the assumptions behind the percentile, basic, and studentized bootstrap intervals when teaching them. These methods are outlined by Davison, A., & Hinkley, D. (1997), Efron, B., & Tibshirani, R.J. (1994), and others.
 
 # Installation
 
@@ -33,9 +33,11 @@ And the output is:
 ## such as the underlying population variance, then this method can be used.
 ```
 
-The bootstrap distribution is symmetric, which makes the assumption about symmetry in the shifted sampling distribution reasonable. However, based on the Central Limit Theorem (CLT), the sampling distribution of the sample mean depends on the variance of the population. Therefore, the second assumption behind this interval is not met and the bootstrap distribution cannot be expected to approximate the sampling distribution well. Notice however, that it contains the population parameter. Our article gives further details about what can happen in the long run if we use these methods incorrectly.
+The bootstrap distribution is symmetric, which makes the assumption about symmetry in the shifted sampling distribution reasonable. Moreover, because our sample size is large, the Central Limit Theorem (CLT) indicates that the sampling distribution of the sample mean will be approximately bell-shaped (i.e. symmetric). However, the CLT also implies that its variance will depend on the variance of the underlying population, an unknown parameter. There may be some differences in the spread of the shifted sampling distributions when the samples come from different populations. However, since the sample size is large, these differences will likely be small (see the article for an example). Therefore, the second assumption behind this interval is reasonable to an extent and the bootstrap distribution can be expected to roughly approximate the sampling distribution.
 
 Each of the functions in the package returns the desired interval, its assumptions, and plots to check those assumptions. These functions can also be used to perform simulations. See `examples.Rmd` for more examples and `breaking_assumptions.Rmd` for the code used to generate the results in the article.
+
+By including the above prompt, this discussion about how reasonable the assumptions are is elicited and students can learn to consider the assumptions of these methods before applying them. It is important to discuss these assumptions because of the differences in the performance of these methods when they are or are not reasonable. Our article give more information on these differences and, in general, the importance of discussing these assumptions.
 
 # Contributing
 
