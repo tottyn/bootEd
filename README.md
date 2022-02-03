@@ -1,7 +1,7 @@
 
 # bootEd
 
-`bootEd` was created for teaching simple bootstrap intervals to undergraduate students in introductory statistics courses. Specifically, this package was created so that teachers can emphasize the assumptions behind the percentile, basic, and studentized bootstrap intervals when teaching them. These methods are outlined by Davison, A., & Hinkley, D. (1997), Efron, B., & Tibshirani, R.J. (1994), and others.
+`bootEd` was created for teaching simple bootstrap intervals to undergraduate students in introductory statistics courses. Specifically, this package was created so that teachers can emphasize assumptions pertaining to pivotal quantities, which the percentile, basic, and studentized bootstrap intervals rely on. The importance of discussing these assumptions is further discussed in [the corresponding article](http://arxiv.org/abs/2112.07737).
 
 # Installation
 
@@ -28,16 +28,15 @@ And the output is:
 ```
 ## The percentile bootstrap interval for the mean is: (2.902389, 3.096528).
 ## 
-## If it is reasonable to assume that the shifted sampling distribution of the 
-## statistic of interest is symmetric and does not depend on any unknown parameters, 
-## such as the underlying population variance, then this method can be used.
+## Assumptions: the shifted sampling distribution of the statistic of interest is symmetric 
+## and it does not depend on any unknown parameters, such as the underlying population variance.
 ```
 
-The bootstrap distribution is symmetric, which makes the assumption about symmetry in the shifted sampling distribution reasonable. Moreover, because our sample size is large, the Central Limit Theorem (CLT) indicates that the sampling distribution of the sample mean will be approximately bell-shaped (i.e. symmetric). However, the CLT also implies that its variance will depend on the variance of the underlying population, an unknown parameter. There may be some differences in the spread of the shifted sampling distributions when the samples come from different populations. However, since the sample size is large, these differences will likely be small (see the article for an example). Therefore, the second assumption behind this interval is reasonable to an extent and the bootstrap distribution can be expected to roughly approximate the sampling distribution.
+The bootstrap distribution is itself symmetric, but the assumption pertains to the shifted sampling distribution, which we are estimating. Since our sample size is large, the Central Limit Theorem (CLT) indicates that the sampling distribution of the sample mean will be approximately bell-shaped (i.e. symmetric). However, the CLT also implies that its variance will depend on the variance of the underlying population, an unknown parameter. Therefore, there will be some differences in the spread of the shifted sampling distributions when the samples come from populations with different variances. However, since the sample size is large, these differences will likely be small (see [the article](http://arxiv.org/abs/2112.07737) for more details). Therefore, the shifted bootstrap distribution can be expected to approximate the shifted sampling distribution moderately well.
 
-Each of the functions in the package returns the desired interval, its assumptions, and plots to check those assumptions. These functions can also be used to perform simulations. See `examples.Rmd` for more examples and `breaking_assumptions.Rmd` for the code used to generate the results in the article.
+Each of the functions in the package returns the desired interval, a prompt about its assumptions, and plots for visualizing the bootstrap distribution. By including the prompt, a discussion about how reasonable the assumptions are is elicited and students can learn to consider the assumptions of these methods before applying them. It is important to discuss these assumptions because there are non-trivial differences in the performance of these methods when their assumptions are or are not reasonable. 
 
-By including the above prompt, this discussion about how reasonable the assumptions are is elicited and students can learn to consider the assumptions of these methods before applying them. It is important to discuss these assumptions because of the differences in the performance of these methods when they are or are not reasonable. Our article give more information on these differences and, in general, the importance of discussing these assumptions.
+These functions can also be used to perform simulations. See `examples.Rmd` for more examples and `breaking_assumptions.Rmd` for the code used to generate the results in the article.
 
 # Contributing
 
