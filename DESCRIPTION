@@ -1,10 +1,10 @@
 Package: bootEd
 Type: Package
-Title: Teach Bootstrap Intervals with an Emphasis on Checking Assumptions
+Title: Teaching Bootstrap Intervals Through Simulations
 Version: 0.1.0
 Author: Njesa Totty
 Maintainer: Njesa Totty <tottyn@oregonstate.edu>
-Description: A pedagogical R package created as a tool for teachers to use when introducing the simple bootstrap to students in introductory statistics courses. Allows users to implement the basic, studentized, and percentile bootstrap intervals. Output and plots emphasize the assumptions of these methods so that students use them appropriately.
+Description: An R package created as a tool for teachers to use when introducing the simple bootstrap to students in introductory statistics courses. Allows users to implement the basic, studentized, and percentile bootstrap intervals.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports: stats, graphics
