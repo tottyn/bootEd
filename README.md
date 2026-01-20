@@ -1,7 +1,7 @@
 
 # bootEd
 
-`bootEd` was created for teaching simple bootstrap intervals to undergraduate students in introductory statistics courses. Specifically, this package was created so that teachers can emphasize assumptions pertaining to pivotal quantities, which the percentile, basic, and studentized bootstrap intervals rely on. The importance of discussing these assumptions is further discussed in [the corresponding article](http://arxiv.org/abs/2112.07737).
+`bootEd` was created as part of a masters project. It was created for teaching simple bootstrap intervals to undergraduate students in introductory statistics courses. Specifically, this package was created so that teachers can emphasize assumptions pertaining to pivotal quantities, which the percentile, basic, and studentized bootstrap intervals rely on. The importance of discussing these assumptions is further discussed in [the corresponding article](http://arxiv.org/abs/2112.07737). The article has since been updated (and continues to be) to reflect a more practical, realistic, and feasible view of introductory statistics students and their needs. This repo mainly serves as evidence of the activities and preserves history. Readers are encouraged to visit the current version of [the corresponding article](http://arxiv.org/abs/2112.07737) and its supplementary materials for help with implementation.
 
 # Installation
 
@@ -47,4 +47,5 @@ These functions can also be used to perform simulations. See `examples.Rmd` for 
 Davison, A., & Hinkley, D. (1997). Bootstrap Methods and their Application (Cambridge Series in Statistical and Probabilistic Mathematics). Cambridge: Cambridge University Press. https://doi.org/10.1017/CBO9780511802843
 
 Efron, B., & Tibshirani, R.J. (1994). An Introduction to the Bootstrap (1st ed.). Chapman and Hall/CRC. https://doi.org/10.1201/9780429246593
+
 
